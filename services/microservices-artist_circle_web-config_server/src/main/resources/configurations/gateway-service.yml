@@ -1,0 +1,15 @@
+server:
+  port: 8890
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+              
+user-service:
+  url: http://user-service

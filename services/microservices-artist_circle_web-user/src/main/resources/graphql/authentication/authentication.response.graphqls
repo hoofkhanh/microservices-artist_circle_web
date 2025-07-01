@@ -1,0 +1,14 @@
+enum AuthenticationStatusType{
+	EMAIL_INVALID,
+	PASSWORD_INVALID
+	REFRESH_TOKEN_ERROR
+	USER_NOT_FOUND
+	MISSING_FIELD
+}
+
+type AuthenticationApiResponse{
+	success: Boolean!
+	message: String!
+	statusType: AuthenticationStatusType
+	accessToken: String
+}

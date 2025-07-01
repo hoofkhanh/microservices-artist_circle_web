@@ -1,0 +1,54 @@
+package com.hokhanh.gateway.user;
+
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import reactor.core.publisher.Mono;
+
+@Component
+public class  UserWebClient  {
+	private final WebClient webClient;
+	
+	@Value("${spring.graphql.http.path}")
+	private String graphqlPath;
+	
+	public UserWebClient(WebClient.Builder builder, @Value("${user-service.url}") String userServiceUrl) {
+		webClient = builder
+            .baseUrl(userServiceUrl)
+            .build();
+    }
+	
+	public Mono<Boolean> isTokenBlocked(String accessToken){
+		String query = """
+		        query($accessToken: String!) {
+		            isTokenBlockedInternal(accessToken: $accessToken)
+		        }
+		    """;
+
+		    Map<String, Object> variables = Map.of("accessToken", accessToken);
+		    GraphQLRequest request = new GraphQLRequest(query, variables);
+
+		    return webClient.post()
+		        .uri(graphqlPath)
+		        .bodyValue(request)
+		        .retrieve()
+		        .bodyToMono(GraphQLResponse.class)
+		        .flatMap(response -> {
+		            // Kiểm tra lỗi từ GraphQL
+		            if (response.errors() != null && !response.errors().isEmpty()) {
+		                String errorMsg = response.errors().get(0).message();
+		                return Mono.error(new RuntimeException("GraphQL Error: " + errorMsg));
+		            }
+
+		            Object value = response.data().get("isTokenBlockedInternal");
+		            if (value instanceof Boolean boolValue) {
+		                return Mono.just(boolValue);
+		            } else {
+		                return Mono.error(new RuntimeException("Unexpected response format"));
+		            }
+		        });
+	}
+}

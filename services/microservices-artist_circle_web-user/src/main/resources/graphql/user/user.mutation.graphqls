@@ -1,0 +1,5 @@
+type Mutation {
+	register(userRequest: UserRequest!): UserApiResponse!
+	verifyRegistrationOtp(otp: String!, email: String!): UserApiResponse!
+	resendOtp(email: String!): UserApiResponse!
+}

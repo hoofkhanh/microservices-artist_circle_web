@@ -1,0 +1,5 @@
+extend type Mutation {
+	login(request: AuthenticationRequest!): AuthenticationApiResponse!
+	logout: AuthenticationApiResponse!
+	refreshToken: AuthenticationApiResponse!
+}

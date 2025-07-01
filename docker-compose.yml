@@ -1,0 +1,172 @@
+services:
+  postgres:
+    container_name: ms-artist_circle_web-postgres
+    image: postgres
+    environment: 
+      POSTGRES_USER: hoofkhanh
+      POSTGRES_PASSWORD: hoofkhanh
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5430:5432
+    networks:
+      - ms-artist_circle_web-net
+    restart: unless-stopped
+    
+  pgadmin:
+    container_name: ms-artist_circle_web-pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: hoofkhanh@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: hoofkhanh
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - 5429:80
+    networks:
+      - ms-artist_circle_web-net
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      
+  mongodb:
+    container_name: ms-artist_circle_web-mongodb
+    image: mongo
+    ports:
+      - 27010:27017
+    volumes:
+      - mongo:/data/db
+      - ./temp_volume/mongo/configdb:/data/configdb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=hoofkhanh
+      - MONGO_INITDB_ROOT_PASSWORD=hoofkhanh
+    networks:
+      - ms-artist_circle_web-net
+    restart: unless-stopped
+      
+  mongo-express:
+    container_name: ms-artist_circle_web-mongo_express
+    image: mongo-express
+    ports:
+      - 8082:8081
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=hoofkhanh
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=hoofkhanh
+      - ME_CONFIG_BASICAUTH_USERNAME=root
+      - ME_CONFIG_BASICAUTH_PASSWORD=root
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    networks:
+      - ms-artist_circle_web-net
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+      
+  zookeeper:
+    container_name: ms-artist_circle_web-zookeeper
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+    networks:
+      - ms-artist_circle_web-net
+    restart: unless-stopped
+    volumes:
+    - ./temp_volume/zookeeper/data:/var/lib/zookeeper/data       
+    - ./temp_volume/zookeeper/log:/var/lib/zookeeper/log        
+    - ./temp_volume/zookeeper/secrets:/etc/zookeeper/secrets 
+  
+  kafka:
+    container_name: ms-artist_circle_web-kafka
+    image: confluentinc/cp-kafka:latest
+    environment:
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+    ports:
+      - 9092:9092
+    networks:
+      - ms-artist_circle_web-net
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    volumes:
+    - ./temp_volume/kafka/data:/var/lib/kafka/data
+    - ./temp_volume/kafka/secrets:/etc/kafka/secrets
+      
+  mail-dev:
+    container_name: ms-artist_circle_web-mail_dev
+    image: maildev/maildev
+    ports:
+      - 1080:1080
+      - 1025:1025
+    networks:
+      - ms-artist_circle_web-net
+    restart: unless-stopped
+      
+  redis:
+    image: redis:latest
+    container_name: ms-artist_circle_web-redis
+    restart: unless-stopped
+    volumes:
+      - redis_volume_data:/data
+    ports:
+      - 6379:6379
+    networks:
+      - ms-artist_circle_web-net
+      
+  redis_insight:
+    image: redis/redisinsight
+    container_name: ms-artist_circle_web-redis_insight
+    restart: unless-stopped
+    ports:
+      - 5540:5540
+    volumes:
+      - redis_insight_volume_data:/data
+    networks:
+      - ms-artist_circle_web-net
+      
+  elasticsearch:
+    container_name: ms-artist_circle_web-es
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
+    environment:
+      - xpack.security.enabled=false
+      - "discovery.type=single-node"
+    networks:
+      - ms-artist_circle_web-net
+    ports:
+      - 9200:9200
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    restart: unless-stopped
+      
+  kibana:
+    container_name:  ms-artist_circle_web-kb
+    image: docker.elastic.co/kibana/kibana:7.11.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://ms-artist_circle_web-es:9200
+    networks:
+      - ms-artist_circle_web-net
+    depends_on:
+      - elasticsearch
+    ports:
+      - 5601:5601
+    restart: unless-stopped
+      
+networks:
+  ms-artist_circle_web-net:
+    driver: bridge
+      
+volumes:
+  postgres:
+  pgadmin:
+  mongo:
+  redis_volume_data:
+  redis_insight_volume_data:
+  es_data:

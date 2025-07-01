@@ -1,0 +1,42 @@
+enum UserStatusType{
+	EMAIL_ALREADY_EXISTS
+	ROLE_NOT_EXISTS
+	REGISTRATION_SESSION_INVALID
+	OTP_EXPIRED
+	OTP_INVALID
+	OTP_STILL_VALID
+}
+
+type MessageOption{
+	expiredOtpMinutes: Int
+	expiredUserMinutes: Int
+}
+
+type RoleResponse{
+	id: ID!
+	name: String!
+}
+
+enum Provider {
+	LOCAL,
+	GOOGLE
+}
+
+type UserResponse{
+	id: ID
+	role: RoleResponse!
+	fullName: String!
+	email: String!
+	isLocked: Boolean!
+	lastActive: String!
+	provider: Provider!
+	createdAt: String
+}
+
+type UserApiResponse{
+	success: Boolean!
+	message: String!
+	statusType: UserStatusType
+	data: UserResponse
+	messageOption: MessageOption
+}
