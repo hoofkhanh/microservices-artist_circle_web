@@ -3,9 +3,11 @@ package com.hokhanh.web.user.request;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public record UserRequest(
 	@NotNull(message = "roleId is mandatory")
+	@Positive(message = "roleId must be a positive number")
 	Long roleId,
 	
 	@NotBlank(message = "fullName is mandatory")

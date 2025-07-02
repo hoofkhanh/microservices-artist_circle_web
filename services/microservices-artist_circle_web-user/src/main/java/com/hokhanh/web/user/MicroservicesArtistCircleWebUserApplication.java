@@ -1,4 +1,4 @@
-package com.hokhanh.web;
+package com.hokhanh.web.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

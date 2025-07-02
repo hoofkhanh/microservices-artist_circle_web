@@ -44,7 +44,7 @@ public class GraphQLOperationFilter implements WebFilter {
 			"login", "register", "verifyRegistrationOtp", "resendOtp", "refreshToken"
 		);
 	
-	private static final List<String> BLOCKED_OPERATIONS = List.of(
+	private static final List<String> INTERNAL_OPERATIONS = List.of(
 			"isTokenBlockedInternal"
 		);
 	
@@ -74,7 +74,7 @@ public class GraphQLOperationFilter implements WebFilter {
 	            
 	            String operationName = operation.getRight();
 	            if(operationName != null 
-	            		&& BLOCKED_OPERATIONS
+	            		&& INTERNAL_OPERATIONS
 	            		.stream().anyMatch(blockedOperation -> blockedOperation.equalsIgnoreCase(operationName))) {
 	            	System.out.println("Can't access this api");
 	            	return JwtAuthUtils.onError(exchange, "Can't access this api", HttpStatus.UNAUTHORIZED);

@@ -2,8 +2,8 @@ package com.hokhanh.gateway.user;
 
 import java.util.Map;
 
-public record GraphQLRequest(String query, Map<String, Object> variables
 
+public record GraphQLRequest(String query, Map<String, Object> variables
 ) {
 
 }

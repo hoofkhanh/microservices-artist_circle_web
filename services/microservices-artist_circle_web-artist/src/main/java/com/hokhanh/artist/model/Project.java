@@ -1,0 +1,66 @@
+package com.hokhanh.artist.model;
+
+import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Builder
+public class Project {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@ManyToOne
+	private Artist poster;
+	
+	@ManyToMany
+	@JoinTable(
+			name = "project_artist",
+			joinColumns = @JoinColumn(name = "project_id"),
+			inverseJoinColumns = @JoinColumn(name = "artist_id")
+	)
+	private List<Artist> artistCollaborations;
+	
+	@ManyToMany
+	@JoinTable(
+			name = "project_musicGenre",
+			joinColumns = @JoinColumn(name = "project_id"),
+			inverseJoinColumns = @JoinColumn(name = "music_genre_id")
+	)
+	private List<MusicGenre> musicGenres;
+	
+	@Column(columnDefinition = "TEXT")
+	private String handwrittenCollaborations;
+	
+	private String name;
+	
+	@Column(columnDefinition = "TEXT")
+	private String description;
+	
+	@Column(columnDefinition = "TEXT")
+	private String musicUrl;
+	
+	@Column(columnDefinition = "TEXT")
+	private String imageUrl;
+	
+	private float duration;
+	
+	@Column(columnDefinition = "TEXT")
+	private String otherMusicGenres;
+}
