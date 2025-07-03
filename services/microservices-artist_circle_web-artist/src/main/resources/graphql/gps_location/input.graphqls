@@ -1,0 +1,4 @@
+input GpsLocationRequest{
+	longitude: Float!
+	latitude: Float!
+}

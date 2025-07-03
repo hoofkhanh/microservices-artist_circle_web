@@ -1,0 +1,12 @@
+input ProjectRequest{
+	posterId: ID!
+	collaboratorIds: [ID!]
+	musicGenreIds: [ID!]
+	customCollaborators: String
+	name: String!
+	description: String!
+	musicUrl: String!
+	imageUrl: String!
+	duration: Float!
+	otherMusicGenreNames: String
+}

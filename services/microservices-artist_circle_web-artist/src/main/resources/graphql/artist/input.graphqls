@@ -1,0 +1,16 @@
+input ArtistRequest{
+	roleIds: [ID!]
+	musicGenreIds: [ID!]
+	userId: ID!
+	birthdate: String!
+	gender: Boolean!
+	avatarUrl: String!
+	artistName: String!
+	instagramUrl: String
+	facebookUrl: String
+	tiktokUrl: String
+	description: String
+	residence: String!
+	otherRoleNames: String
+	otherMusicGenreNames: String
+}

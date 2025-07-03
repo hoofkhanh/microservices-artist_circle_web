@@ -1,0 +1,15 @@
+type MusicGenreResponse {
+	id: ID!
+	name: String!
+}
+
+type PageInfo{
+	size: Int!
+	number: Int!
+	totalElements: Int!
+	totalPages: Int!
+}
+
+enum StatusType{
+	ERROR
+}

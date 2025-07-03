@@ -35,7 +35,7 @@ public class Project {
 			joinColumns = @JoinColumn(name = "project_id"),
 			inverseJoinColumns = @JoinColumn(name = "artist_id")
 	)
-	private List<Artist> artistCollaborations;
+	private List<Artist> collaborators;
 	
 	@ManyToMany
 	@JoinTable(
@@ -46,7 +46,7 @@ public class Project {
 	private List<MusicGenre> musicGenres;
 	
 	@Column(columnDefinition = "TEXT")
-	private String handwrittenCollaborations;
+	private String customCollaborators;
 	
 	private String name;
 	
@@ -62,5 +62,5 @@ public class Project {
 	private float duration;
 	
 	@Column(columnDefinition = "TEXT")
-	private String otherMusicGenres;
+	private String otherMusicGenreNames;
 }

@@ -1,0 +1,38 @@
+type ArtistSummaryResponse{
+	id: ID!
+	artistName: String!
+	avatarUrl: String!
+}
+
+type ProjectResponse{
+	id: ID!
+	poster: ArtistSummaryResponse!
+	collaborators: [ArtistSummaryResponse!]
+	musicGenres: [MusicGenreResponse!]
+	customCollaborators: String
+	name: String!
+	description: String!
+	musicUrl: String!
+	imageUrl: String!
+	duration: Float!
+	otherMusicGenreNames: String
+}
+
+type ProjectApiResponse{
+	success: Boolean!
+	message: String!
+	statusType: StatusType
+	data: ProjectResponse
+}
+
+type ProjectPage{
+	content: [ProjectResponse!]!
+	page: PageInfo!
+}
+
+type ProjectListApiResponse{
+	success: Boolean!
+	message: String!
+	statusType: StatusType
+	data: ProjectPage!
+}

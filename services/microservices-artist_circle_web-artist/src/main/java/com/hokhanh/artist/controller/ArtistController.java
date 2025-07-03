@@ -11,4 +11,5 @@ import lombok.RequiredArgsConstructor;
 public class ArtistController {
 	private final ArtistService service;
 	
+	
 }

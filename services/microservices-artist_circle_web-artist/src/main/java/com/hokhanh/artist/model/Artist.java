@@ -75,5 +75,8 @@ public class Artist {
 	private String residence;
 	
 	@Column(columnDefinition = "TEXT")
-	private String otherRoles;
+	private String otherRoleNames;
+	
+	@Column(columnDefinition = "TEXT")
+	private String otherMusicGenreNames;
 }

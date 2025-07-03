@@ -4,19 +4,22 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record ProjectRequest(
-	@NotEmpty(message = "artistCollaborationIds must not be null and empty")
+	@NotNull(message = "posterId must not be null")
+	@Positive(message = "posterId must be a positive number")
+	Long posterId,	
+	
+	// k có @Empty vì collaboratorIds đc null
 	@Valid
 	List<
-		@NotNull(message = "Each artistCollaborationId must not be null")
-		@Positive(message = "Each artistCollaborationId must be a positive number")
-	Long> artistCollaborationIds,
+		@NotNull(message = "Each collaboratorId must not be null")
+		@Positive(message = "Each collaboratorId must be a positive number")
+	Long> collaboratorIds,
 	
-	@NotEmpty(message = "musicGenreIds must not be null and empty")
+	// k có @Empty vì musicGenreIds đc null
 	@Valid
 	List<
 		@NotNull(message = "Each musicGenreId must not be null")
@@ -24,7 +27,7 @@ public record ProjectRequest(
 	Long> musicGenreIds,
 	
 	
-	String handwrittenCollaborations,
+	String customCollaborators,
 	
 	@NotBlank(message = "name is mandatory")
 	String name,
@@ -42,7 +45,7 @@ public record ProjectRequest(
 	@Positive(message = "duration must be a positive number")
 	Float duration,
 	
-	String otherMusicGenres
+	String otherMusicGenreNames
 ) {
 
 }

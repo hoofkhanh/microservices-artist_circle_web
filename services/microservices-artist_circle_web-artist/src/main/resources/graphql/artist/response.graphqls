@@ -1,0 +1,43 @@
+type RoleResponse{
+	id: ID!
+	name: String!
+}
+
+type ArtistResponse{
+	id: ID!
+	roles: [RoleResponse!]
+	musicGenres: [MusicGenreResponse!]
+	projects: ProjectPage
+	gpsLocation: GpsLocationResponse
+	userId: ID!
+	birthdate: String!
+	gender: Boolean!
+	avatarUrl: String!
+	artistName: String!
+	instagramUrl: String
+	facebookUrl: String
+	tiktokUrl: String
+	description: String
+	residence: String!
+	otherRoleNames: String
+	otherMusicGenreNames: String
+}
+
+type ArtistApiResponse{
+	success: Boolean!
+	message: String!
+	statusType: StatusType
+	data: ArtistResponse
+}
+
+type ArtistPage{
+	content: [ArtistResponse!]!
+	page: PageInfo!
+}
+
+type ArtistListApiResponse{
+	success: Boolean!
+	message: String!
+	statusType: StatusType
+	data: ArtistPage!
+}

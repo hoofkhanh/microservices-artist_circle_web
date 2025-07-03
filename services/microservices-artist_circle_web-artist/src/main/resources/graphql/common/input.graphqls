@@ -1,0 +1,6 @@
+type PageRequest{
+	size: Int!
+	page: Int!
+	sortBy: String
+	ascending: Boolean
+}

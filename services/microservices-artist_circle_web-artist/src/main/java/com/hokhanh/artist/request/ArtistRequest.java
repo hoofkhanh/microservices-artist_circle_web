@@ -5,21 +5,20 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Positive;
 
 
 public record ArtistRequest(
-	@NotEmpty(message = "roleIds must not be null and empty")
+	// k có @Empty vì roleIds đc null
 	@Valid
 	List<
 		@NotNull(message = "Each roleId must not be null")
 		@Positive(message = "Each roleId must be a positive number")
 	Long> roleIds,
 	
-	@NotEmpty(message = "musicGenreIds must not be null and empty")
+	// k có @Empty vì musicGenreIds đc null
 	@Valid
 	List<
 		@NotNull(message = "Each musicGenreId must not be null")
@@ -50,7 +49,8 @@ public record ArtistRequest(
 	
 	@NotBlank(message = "residence is mandatory")
 	String residence,
-	String otherRoles
+	String otherRoleNames,
+	String otherMusicGenreNames
 ) {
 
 }
