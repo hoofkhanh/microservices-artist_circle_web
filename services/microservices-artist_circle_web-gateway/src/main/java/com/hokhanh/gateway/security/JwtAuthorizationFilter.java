@@ -96,7 +96,8 @@ public class JwtAuthorizationFilter implements WebFilter {
 		
 		return checkRole(exchange, exchange.getRequest(), roleName)
 				.switchIfEmpty(Mono.defer(() -> {
-					ServerHttpRequest mutatedRequest = exchange.getRequest().mutate().header(HEADER_USER_ID, userId)
+					ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
+							.header(HEADER_USER_ID, userId)
 							.header(HEADER_USER_ROLE, roleName).build();
 
 					ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();

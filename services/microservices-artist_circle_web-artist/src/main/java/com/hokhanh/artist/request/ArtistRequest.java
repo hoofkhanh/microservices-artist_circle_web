@@ -25,10 +25,6 @@ public record ArtistRequest(
 		@Positive(message = "Each musicGenreId must be a positive number")
 	Long> musicGenreIds,
 	
-	@NotNull(message = "userId is mandatory")
-	@Positive(message = "userId must be a positive number")
-	Long userId,
-	
 	@NotNull(message = "birthdate is mandatory")
 	@Past(message = "birthdate must be in the past")
 	LocalDate birthdate,

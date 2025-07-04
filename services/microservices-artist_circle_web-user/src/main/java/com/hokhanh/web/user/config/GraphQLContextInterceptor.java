@@ -8,6 +8,7 @@ import org.springframework.graphql.server.WebGraphQlInterceptor;
 import org.springframework.graphql.server.WebGraphQlRequest;
 import org.springframework.graphql.server.WebGraphQlResponse;
 import org.springframework.http.HttpCookie;
+import org.springframework.http.HttpHeaders;
 
 import com.hokhanh.web.user.constant.AuthenticationConstants;
 import com.hokhanh.web.user.jwt.JwtProperties;
@@ -28,7 +29,7 @@ public class GraphQLContextInterceptor implements WebGraphQlInterceptor {
 		// here run before go into controller
 		HttpCookie refreshTokenFromCookie = request.getCookies()
 				.getFirst(AuthenticationConstants.REFRESH_TOKEN_COOKIE_NAME);
-		String authorization = request.getHeaders().getFirst("Authorization");
+		String authorization = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 		request.configureExecutionInput((executionInput, builder) -> {
 			Map<String, Object> contextMap = new HashMap<>();
 			if (refreshTokenFromCookie != null) {
