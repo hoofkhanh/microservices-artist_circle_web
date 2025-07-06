@@ -41,11 +41,11 @@ public class GraphQLOperationFilter implements WebFilter {
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	private static final List<String> PUBLIC_OPERATIONS = List.of(
-			"login", "register", "verifyRegistrationOtp", "resendOtp", "refreshToken"
+			"login", "register", "verifyRegistrationOtp", "resendOtp", "refreshToken", "registerArtist"
 		);
 	
 	private static final List<String> INTERNAL_OPERATIONS = List.of(
-			"isTokenBlockedInternal"
+			"isTokenBlockedInternal", "checkUserExistsInternal"
 		);
 	
 	@Value("${spring.graphql.http.path}")
@@ -76,7 +76,6 @@ public class GraphQLOperationFilter implements WebFilter {
 	            if(operationName != null 
 	            		&& INTERNAL_OPERATIONS
 	            		.stream().anyMatch(blockedOperation -> blockedOperation.equalsIgnoreCase(operationName))) {
-	            	System.out.println("Can't access this api");
 	            	return JwtAuthUtils.onError(exchange, "Can't access this api", HttpStatus.UNAUTHORIZED);
 	    		}
 	            

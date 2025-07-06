@@ -1,6 +1,8 @@
 input ArtistRequest{
+	id: ID
 	roleIds: [ID!]
 	musicGenreIds: [ID!]
+	userId: ID
 	birthdate: String!
 	gender: Boolean!
 	avatarUrl: String!

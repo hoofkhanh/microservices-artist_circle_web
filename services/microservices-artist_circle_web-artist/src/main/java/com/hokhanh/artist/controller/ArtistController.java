@@ -1,6 +1,7 @@
 package com.hokhanh.artist.controller;
 
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.stereotype.Controller;
 
 import com.hokhanh.artist.request.ArtistRequest;
@@ -15,7 +16,10 @@ import lombok.RequiredArgsConstructor;
 public class ArtistController {
 	private final ArtistService service;
 	
-//	public ArtistApiResponse registerOrUpdateArtistProfile(@Argument @Valid ArtistRequest request) {
-//		
-//	}
+	// tạo hàm thêm ảnh, nhạc vào cloudinary
+	
+	@MutationMapping
+	public ArtistApiResponse registerArtist(@Argument @Valid ArtistRequest artistRequest) {
+		return service.register(artistRequest);
+	}
 }

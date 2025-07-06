@@ -89,6 +89,12 @@
 				<version>0.11.2</version>
 				<scope>runtime</scope>
 			</dependency>
+			
+			<dependency>
+				<groupId>com.hokhanh</groupId>
+				<artifactId>microservices-artist_circle_web-common</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

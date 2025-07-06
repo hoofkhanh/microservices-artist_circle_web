@@ -23,5 +23,10 @@
     "name": "jwt.secret-key",
     "type": "java.lang.String",
     "description": "A description for 'jwt.secret-key'"
+  },
+  {
+    "name": "user-service.base-url",
+    "type": "java.lang.String",
+    "description": "A description for 'user-service.base-url'"
   }
 ]}

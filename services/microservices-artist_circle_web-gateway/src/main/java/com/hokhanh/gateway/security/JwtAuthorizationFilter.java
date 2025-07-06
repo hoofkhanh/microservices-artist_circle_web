@@ -15,7 +15,8 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 
-import com.hokhanh.gateway.user.UserWebClient;
+import com.hokhanh.common.constant.HttpHeadersConstants;
+import com.hokhanh.gateway.client.UserClient;
 
 import reactor.core.publisher.Mono;
 
@@ -23,16 +24,13 @@ import reactor.core.publisher.Mono;
 public class JwtAuthorizationFilter implements WebFilter {
 	
 	private static final List<String> ADMIN_REQUIRED_OPERATIONS = List.of();
-	private static final List<String> ARTIST_REQUIRED_OPERATIONS = List.of();
+	private static final List<String> ARTIST_REQUIRED_OPERATIONS = List.of("registerArtist");
 	
 	private static final String ADMIN_ROLE = "ADMIN";
 	private static final String ARTIST_ROLE = "ARTIST";
 	
-	private static final String HEADER_USER_ID  = "X-User-Id";
-	private static final String HEADER_USER_ROLE  = "X-User-Role";
-	
 	@Autowired
-	private UserWebClient userWebClient;
+	private UserClient userWebClient;
 
 	@Autowired
 	private JwtService jwtService;
@@ -63,7 +61,7 @@ public class JwtAuthorizationFilter implements WebFilter {
 				return JwtAuthUtils.onError(exchange, "Token is invalid", HttpStatus.UNAUTHORIZED);
 			}
 			
-			return userWebClient.isTokenBlocked(token)
+			return userWebClient.isTokenBlockedInternal(token)
 				.flatMap(isBlocked -> {
 					if(isBlocked) {
 						return JwtAuthUtils.onError(exchange, "Token is blocked", HttpStatus.UNAUTHORIZED);
@@ -97,8 +95,10 @@ public class JwtAuthorizationFilter implements WebFilter {
 		return checkRole(exchange, exchange.getRequest(), roleName)
 				.switchIfEmpty(Mono.defer(() -> {
 					ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
-							.header(HEADER_USER_ID, userId)
-							.header(HEADER_USER_ROLE, roleName).build();
+							.header(HttpHeadersConstants.HEADER_USER_ID, userId)
+							.header(HttpHeadersConstants.HEADER_USER_ROLE, roleName)
+							.header(HttpHeadersConstants.HEADER_USER_ROLE, email)
+							.build();
 
 					ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();
 

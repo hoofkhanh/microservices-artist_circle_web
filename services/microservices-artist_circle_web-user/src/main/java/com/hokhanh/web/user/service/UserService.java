@@ -2,6 +2,7 @@ package com.hokhanh.web.user.service;
 
 import org.springframework.stereotype.Service;
 
+import com.hokhanh.common.util.StringUtils;
 import com.hokhanh.web.user.constant.ExpirationConstants;
 import com.hokhanh.web.user.email.UserEmailService;
 import com.hokhanh.web.user.mapper.UserMapper;
@@ -49,7 +50,13 @@ public class UserService {
 		userRedisService.deleteCachedOtpAndUserRequest(email);
 				
 		Role role = roleRepository.findById(userRequest.roleId()).orElse(null);
-		User user = userRepository.save(mapper.toUser(userRequest, role));
+		
+		User user = mapper.toUser(userRequest, role);
+		user.setFullName(StringUtils.cleanBlank(user.getFullName()));
+		user.setEmail(StringUtils.cleanBlank(user.getEmail()));
+		user.setPassword(StringUtils.cleanBlank(user.getPassword()));
+		
+		user = userRepository.save(user);
 		
 		return new UserApiResponse(true, "Register successfully", null, mapper.toUserResponse(user), null);
 	}
@@ -64,6 +71,14 @@ public class UserService {
 
 		return new UserApiResponse(true, "OTP resend to your gmail", null, null,
 				new MessageOption(ExpirationConstants.OTP_MINUTES, null));
+	}
+	
+	public boolean checkUserExistsInternal(Long id) {
+		if(userRepository.existsById(id)) {
+			return true;
+		}
+		
+		return false;
 	}
 
 	private void handleUserOtpFlow(UserRequest userRequest) {
@@ -140,5 +155,7 @@ public class UserService {
 		
 		return null;
 	}
+
+	
 
 }

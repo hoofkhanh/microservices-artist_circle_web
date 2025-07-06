@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public record ClaimsData(
-	Long userId,
+	Long userId, // subject of token so don't need to go to the 'toMap'
 	String email,
     String roleName
 ) {

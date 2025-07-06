@@ -86,6 +86,11 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.hokhanh</groupId>
+			<artifactId>microservices-artist_circle_web-common</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

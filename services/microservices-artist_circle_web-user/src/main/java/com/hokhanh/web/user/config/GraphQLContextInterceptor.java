@@ -42,7 +42,7 @@ public class GraphQLContextInterceptor implements WebGraphQlInterceptor {
 		});
 
 		return chain.next(request).doOnNext(response -> {
-			// here run after finish request
+			// here run after finishing request
 			GraphQLContext ctx = response.getExecutionInput().getGraphQLContext();
 			Boolean setCookie = ctx.getOrDefault(AuthenticationConstants.SET_COOKIE_CONTEXT_KEY, false);
 

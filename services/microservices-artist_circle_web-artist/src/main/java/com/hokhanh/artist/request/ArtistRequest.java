@@ -11,6 +11,9 @@ import jakarta.validation.constraints.Positive;
 
 
 public record ArtistRequest(
+	@Positive(message = "roleId must be a positive number")
+	Long id,
+		
 	// k có @Empty vì roleIds đc null
 	@Valid
 	List<
@@ -24,6 +27,10 @@ public record ArtistRequest(
 		@NotNull(message = "Each musicGenreId must not be null")
 		@Positive(message = "Each musicGenreId must be a positive number")
 	Long> musicGenreIds,
+	
+//	if update request.userId() == null because userId get from cookie, positve doesn't check >0 when it null
+	@Positive(message = "userId must be a positive number")
+	Long userId,
 	
 	@NotNull(message = "birthdate is mandatory")
 	@Past(message = "birthdate must be in the past")

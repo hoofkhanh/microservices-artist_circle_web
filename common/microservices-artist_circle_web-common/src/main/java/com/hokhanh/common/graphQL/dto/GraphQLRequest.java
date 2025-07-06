@@ -1,4 +1,4 @@
-package com.hokhanh.gateway.user;
+package com.hokhanh.common.graphQL.dto;
 
 import java.util.Map;
 
