@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.hokhanh.artist.model.Role;
-import com.hokhanh.artist.response.artist.RoleResponse;
+import com.hokhanh.artist.response.artist.common.RoleResponse;
 
 @Service
 public class RoleMapper {

@@ -7,8 +7,6 @@ import org.springframework.graphql.server.WebGraphQlInterceptor;
 import org.springframework.graphql.server.WebGraphQlRequest;
 import org.springframework.graphql.server.WebGraphQlResponse;
 
-import com.hokhanh.common.constant.HttpHeadersConstants;
-
 import reactor.core.publisher.Mono;
 
 public class GraphQLHeaderContextInterceptor implements WebGraphQlInterceptor {

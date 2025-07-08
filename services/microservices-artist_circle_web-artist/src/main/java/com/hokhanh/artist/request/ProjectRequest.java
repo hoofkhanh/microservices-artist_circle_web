@@ -37,9 +37,13 @@ public record ProjectRequest(
 	
 	@NotBlank(message = "musicUrl is mandatory")
 	String musicUrl,
+	@NotBlank(message = "musicCloudinaryPublicId is mandatory")
+	String musicCloudinaryPublicId,
 	
 	@NotBlank(message = "imageUrl is mandatory")
 	String imageUrl,
+	@NotBlank(message = "imageCloudinaryPublicId is mandatory")
+	String imageCloudinaryPublicId,
 	
 	@NotNull(message = "duration must not be null")
 	@Positive(message = "duration must be a positive number")

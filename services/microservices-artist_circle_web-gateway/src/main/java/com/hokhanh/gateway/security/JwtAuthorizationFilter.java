@@ -15,7 +15,9 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 
-import com.hokhanh.common.constant.HttpHeadersConstants;
+import com.hokhanh.common.constant.RoleConstants;
+import com.hokhanh.common.graphQL.HttpHeadersConstants;
+import com.hokhanh.common.jwt.JwtService;
 import com.hokhanh.gateway.client.UserClient;
 
 import reactor.core.publisher.Mono;
@@ -25,9 +27,6 @@ public class JwtAuthorizationFilter implements WebFilter {
 	
 	private static final List<String> ADMIN_REQUIRED_OPERATIONS = List.of();
 	private static final List<String> ARTIST_REQUIRED_OPERATIONS = List.of("registerArtist");
-	
-	private static final String ADMIN_ROLE = "ADMIN";
-	private static final String ARTIST_ROLE = "ARTIST";
 	
 	@Autowired
 	private UserClient userWebClient;
@@ -110,13 +109,13 @@ public class JwtAuthorizationFilter implements WebFilter {
 		String operationName = request.getHeaders().getFirst(JwtAuthUtils.HEADER_OPERATION_NAME);
 		if(ADMIN_REQUIRED_OPERATIONS
 				.stream().anyMatch(x -> x.equalsIgnoreCase(operationName))
-				&& !ADMIN_ROLE.equalsIgnoreCase(roleName)) {
+				&& !RoleConstants.ADMIN_ROLE.equalsIgnoreCase(roleName)) {
 			return JwtAuthUtils.onError(exchange, "THIS REQUEST IS ADMIN ROLE", HttpStatus.FORBIDDEN);
 		}
 		
 		if(ARTIST_REQUIRED_OPERATIONS
 				.stream().anyMatch(x -> x.equalsIgnoreCase(operationName))
-				&& !ARTIST_ROLE.equalsIgnoreCase(roleName)) {
+				&& !RoleConstants.ARTIST_ROLE.equalsIgnoreCase(roleName)) {
 			return JwtAuthUtils.onError(exchange, "THIS REQUEST IS ARTIST ROLE", HttpStatus.FORBIDDEN);
 		}
 		

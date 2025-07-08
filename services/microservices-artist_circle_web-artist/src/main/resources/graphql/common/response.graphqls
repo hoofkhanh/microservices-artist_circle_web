@@ -17,3 +17,14 @@ enum StatusType{
 	USER_NOT_FOUND
 	USER_REGISTERED
 }
+
+type ApiResponse{
+	success: Boolean!
+	message: String!
+	statusType: StatusType
+}
+
+type CloudinaryResponse{
+	publicId: String!
+	secureUrl: String!
+}

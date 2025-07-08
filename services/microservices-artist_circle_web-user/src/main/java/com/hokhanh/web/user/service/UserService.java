@@ -2,6 +2,7 @@ package com.hokhanh.web.user.service;
 
 import org.springframework.stereotype.Service;
 
+import com.hokhanh.common.constant.RoleConstants;
 import com.hokhanh.common.util.StringUtils;
 import com.hokhanh.web.user.constant.ExpirationConstants;
 import com.hokhanh.web.user.email.UserEmailService;
@@ -74,7 +75,7 @@ public class UserService {
 	}
 	
 	public boolean checkUserExistsInternal(Long id) {
-		if(userRepository.existsById(id)) {
+		if(userRepository.existsByIdAndRole_Name(id, RoleConstants.ARTIST_ROLE)) {
 			return true;
 		}
 		

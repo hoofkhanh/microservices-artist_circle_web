@@ -18,8 +18,8 @@ public class UserController {
 	private final UserService service;
 	
 	@MutationMapping
-	public UserApiResponse register(@Argument @Valid UserRequest userRequest) {
-		return service.register(userRequest);
+	public UserApiResponse register(@Argument @Valid UserRequest request) {
+		return service.register(request);
 	}
 	
 	@MutationMapping

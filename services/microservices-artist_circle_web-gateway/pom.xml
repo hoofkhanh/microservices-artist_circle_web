@@ -11,7 +11,7 @@
 	</parent>
 	<artifactId>microservices-artist_circle_web-gateway</artifactId>
 	<name>microservices-artist_circle_web-gateway</name>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -39,7 +39,7 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
@@ -66,11 +66,17 @@
 			<groupId>com.graphql-java</groupId>
 			<artifactId>graphql-java</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.hokhanh</groupId>
 			<artifactId>microservices-artist_circle_web-common</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>io.github.cdimascio</groupId>
+			<artifactId>dotenv-java</artifactId>
+		</dependency>
+
 	</dependencies>
 
 

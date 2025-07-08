@@ -4,8 +4,8 @@ import java.time.Duration;
 
 import org.springframework.stereotype.Service;
 
+import com.hokhanh.common.jwt.JwtPropertyConstants;
 import com.hokhanh.web.user.constant.AuthenticationConstants;
-import com.hokhanh.web.user.jwt.JwtProperties;
 
 import lombok.RequiredArgsConstructor;
 
@@ -13,11 +13,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthenticationRedisService {
 	private final RedisService redisService;
-	private final JwtProperties jwtProperties;
 
 	public void cacheRefreshToken(String refreshToken) {
 		redisService.setValue(AuthenticationConstants.REFRESH_TOKEN_REDIS_KEY + refreshToken, refreshToken,
-				Duration.ofMillis(jwtProperties.getRefreshExpiration()));
+				Duration.ofMillis(JwtPropertyConstants.REFRESH_EXPIRATION));
 	}
 
 	public void putAccessTokenToBlackList(String accessToken, long ttl) {

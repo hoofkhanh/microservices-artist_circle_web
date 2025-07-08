@@ -10,20 +10,16 @@ import org.springframework.graphql.server.WebGraphQlResponse;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
 
+import com.hokhanh.common.jwt.JwtPropertyConstants;
 import com.hokhanh.web.user.constant.AuthenticationConstants;
-import com.hokhanh.web.user.jwt.JwtProperties;
 import com.hokhanh.web.user.util.CookieUtil;
 
 import graphql.GraphQLContext;
-import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 @Configuration
-@RequiredArgsConstructor
 public class GraphQLContextInterceptor implements WebGraphQlInterceptor {
 	
-	private final JwtProperties jwtProperties;
-
 	@Override
 	public Mono<WebGraphQlResponse> intercept(WebGraphQlRequest request, Chain chain) {
 		// here run before go into controller
@@ -49,7 +45,7 @@ public class GraphQLContextInterceptor implements WebGraphQlInterceptor {
 			if (Boolean.TRUE.equals(setCookie)) {
 				String refreshTokenFromContext = ctx.get(AuthenticationConstants.REFRESH_TOKEN_COOKIE_NAME);
 				CookieUtil.setHttpOnlyCookie(response, AuthenticationConstants.REFRESH_TOKEN_COOKIE_NAME,
-						refreshTokenFromContext, jwtProperties.getRefreshExpiration(),
+						refreshTokenFromContext, JwtPropertyConstants.REFRESH_EXPIRATION,
 						AuthenticationConstants.REFRESH_TOKEN_COOKIE_PATH);
 			}
 

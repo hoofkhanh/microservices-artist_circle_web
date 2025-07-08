@@ -7,27 +7,35 @@ type ArtistResponse{
 	id: ID!
 	roles: [RoleResponse!]
 	musicGenres: [MusicGenreResponse!]
-	projects: ProjectPage
-	gpsLocation: GpsLocationResponse
-	userId: ID!
 	birthdate: String!
 	gender: Boolean!
-	avatarUrl: String!
 	artistName: String!
-	instagramUrl: String
-	facebookUrl: String
-	tiktokUrl: String
-	description: String
 	residence: String!
 	otherRoleNames: String
 	otherMusicGenreNames: String
 }
 
-type ArtistApiResponse{
-	success: Boolean!
-	message: String!
-	statusType: StatusType
-	data: ArtistResponse
+type ArtistProfileUpdateResponse{
+	artist: ArtistResponse!
+	avatarUrl: String!
+	instagramUrl: String
+	facebookUrl: String
+	tiktokUrl: String
+	description: String
+}
+
+type ArtistRegistrationResponse{
+	artist: ArtistResponse!
+}
+
+type ArtistRegistrationApiResponse{
+	apiResponse: ApiResponse!
+	data: ArtistRegistrationResponse
+}
+
+type ArtistProfileUpdateApiResponse{
+	apiResponse: ApiResponse!
+	data: ArtistProfileUpdateResponse
 }
 
 type ArtistPage{

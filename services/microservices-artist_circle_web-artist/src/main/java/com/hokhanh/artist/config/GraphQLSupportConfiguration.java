@@ -3,13 +3,13 @@ package com.hokhanh.artist.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.hokhanh.common.config.GraphQLHeaderContextInterceptorConfig;
-import com.hokhanh.common.config.GraphQLValidationExceptionHandlerConfig;
+import com.hokhanh.common.config.GraphQLHeaderContextInterceptorAutoConfiguration;
+import com.hokhanh.common.config.GraphQLValidationExceptionHandlerAutoConfiguration;
 
 @Configuration
 @Import({
-	GraphQLHeaderContextInterceptorConfig.class,
-	GraphQLValidationExceptionHandlerConfig.class
+	GraphQLHeaderContextInterceptorAutoConfiguration.class,
+	GraphQLValidationExceptionHandlerAutoConfiguration.class
 })
 public class GraphQLSupportConfiguration {
 

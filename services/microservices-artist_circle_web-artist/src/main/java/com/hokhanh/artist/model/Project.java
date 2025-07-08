@@ -55,9 +55,13 @@ public class Project {
 	
 	@Column(columnDefinition = "TEXT")
 	private String musicUrl;
+	@Column(columnDefinition = "TEXT")
+	private String musicCloudinaryPublicId;
 	
 	@Column(columnDefinition = "TEXT")
 	private String imageUrl;
+	@Column(columnDefinition = "TEXT")
+	private String imageCloudinaryPublicId;
 	
 	private float duration;
 	

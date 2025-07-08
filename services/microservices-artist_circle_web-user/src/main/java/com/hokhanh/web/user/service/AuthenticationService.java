@@ -5,9 +5,9 @@ import java.util.Date;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.hokhanh.common.jwt.ClaimsData;
+import com.hokhanh.common.jwt.JwtService;
 import com.hokhanh.web.user.constant.AuthenticationConstants;
-import com.hokhanh.web.user.jwt.ClaimsData;
-import com.hokhanh.web.user.jwt.JwtService;
 import com.hokhanh.web.user.model.User;
 import com.hokhanh.web.user.redis.AuthenticationRedisService;
 import com.hokhanh.web.user.repository.UserRepository;

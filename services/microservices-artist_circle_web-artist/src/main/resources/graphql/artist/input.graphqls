@@ -1,17 +1,26 @@
 input ArtistRequest{
-	id: ID
 	roleIds: [ID!]
 	musicGenreIds: [ID!]
-	userId: ID
 	birthdate: String!
 	gender: Boolean!
-	avatarUrl: String!
 	artistName: String!
+	residence: String!
+	otherRoleNames: String
+	otherMusicGenreNames: String
+}
+
+input ArtistProfileUpdateRequest{
+	artist: ArtistRequest!
+	id: ID!
+	avatarUrl: String!
+	avatarCloudinaryPublicId: String!
 	instagramUrl: String
 	facebookUrl: String
 	tiktokUrl: String
 	description: String
-	residence: String!
-	otherRoleNames: String
-	otherMusicGenreNames: String
+}
+
+input ArtistRegistrationRequest{
+	artist: ArtistRequest!
+	userId: ID!
 }

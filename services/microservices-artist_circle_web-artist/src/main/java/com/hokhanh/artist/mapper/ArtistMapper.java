@@ -9,58 +9,69 @@ import com.hokhanh.artist.model.GpsLocation;
 import com.hokhanh.artist.model.MusicGenre;
 import com.hokhanh.artist.model.Project;
 import com.hokhanh.artist.model.Role;
-import com.hokhanh.artist.request.ArtistRequest;
-import com.hokhanh.artist.response.artist.ArtistResponse;
-import com.hokhanh.artist.response.artist.RoleResponse;
+import com.hokhanh.artist.request.artist.ArtistRequest;
+import com.hokhanh.artist.response.artist.common.ArtistResponse;
+import com.hokhanh.artist.response.artist.common.RoleResponse;
+import com.hokhanh.artist.response.artist.profileUpdate.ArtistProfileUpdateResponse;
+import com.hokhanh.artist.response.artist.registration.ArtistRegistrationResponse;
 import com.hokhanh.artist.response.common.MusicGenreResponse;
-import com.hokhanh.artist.response.gpsLocation.GpsLocationResponse;
-import com.hokhanh.artist.response.project.ProjectPage;
+
 
 @Service
 public class ArtistMapper {
 	
-	public Artist toArtist(ArtistRequest request, Long userId
+	public Artist toArtist(ArtistRequest request, ArtistBuildContext artistBuildContext
 			, List<Role> roles, List<MusicGenre> musicGenres, List<Project> projects, GpsLocation gpsLocation) {
 		return Artist.builder()
 				.roles(roles)
 				.musicGenres(musicGenres)
 				.projects(projects)
 				.gpsLocation(gpsLocation)
-				.userId(userId)
+				.userId(artistBuildContext.userId())
 				.birthdate(request.birthdate())
 				.gender(request.gender())
-				.avatarUrl(request.avatarUrl())
+				.avatarUrl(artistBuildContext.avatarUrl())
 				.artistName(request.artistName())
-				.instagramUrl(request.instagramUrl())
-				.facebookUrl(request.facebookUrl())
-				.tiktokUrl(request.tiktokUrl())
-				.description(request.description())
+				.instagramUrl(artistBuildContext.instagramUrl())
+				.facebookUrl(artistBuildContext.facebookUrl())
+				.tiktokUrl(artistBuildContext.tiktokUrl())
+				.description(artistBuildContext.description())
 				.residence(request.residence())
 				.otherRoleNames(request.otherRoleNames())
 				.otherMusicGenreNames(request.otherMusicGenreNames())
 				.build();
 	}
 	
-	public ArtistResponse toArtistResponse(Artist artist, List<RoleResponse> roles, 
-			List<MusicGenreResponse> musicGenres, ProjectPage projects, GpsLocationResponse gpsLocation) {
-		return new ArtistResponse(
-				artist.getId(), 
-				roles, 
-				musicGenres, 
-				projects, 
-				gpsLocation, 
-				artist.getUserId(), 
-				artist.getBirthdate(), 
-				artist.isGender(), 
-				artist.getAvatarUrl(), 
-				artist.getArtistName(), 
-				artist.getInstagramUrl(), 
-				artist.getFacebookUrl(), 
-				artist.getTiktokUrl(), 
-				artist.getDescription(), 
-				artist.getResidence(), 
-				artist.getOtherRoleNames(), 
-				artist.getOtherMusicGenreNames()
+	public ArtistRegistrationResponse toArtistRegistrationResponse(Artist artist, List<RoleResponse> roles, 
+			List<MusicGenreResponse> musicGenres) {
+		return new ArtistRegistrationResponse(
+				buildArtistResponse(artist, roles, musicGenres)
 		);
+	}
+	
+	public ArtistProfileUpdateResponse toArtistProfileUpdateResponse(Artist artist, List<RoleResponse> roles, 
+			List<MusicGenreResponse> musicGenres) {
+		return new ArtistProfileUpdateResponse(
+				buildArtistResponse(artist, roles, musicGenres),
+				artist.getAvatarUrl(),
+				artist.getInstagramUrl(),
+				artist.getFacebookUrl(),
+				artist.getTiktokUrl(),
+				artist.getDescription()
+		);
+	}
+	
+	private ArtistResponse buildArtistResponse(Artist artist, List<RoleResponse> roles, List<MusicGenreResponse> musicGenres) {
+		return new ArtistResponse(
+				artist.getId(),
+				roles,
+				musicGenres,
+				artist.getBirthdate(),
+				artist.isGender(),
+				artist.getArtistName(),
+				artist.getResidence(),
+				artist.getOtherRoleNames(),
+				artist.getOtherMusicGenreNames()
+			);
 	}
 }

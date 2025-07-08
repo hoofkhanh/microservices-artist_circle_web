@@ -1,0 +1,10 @@
+type CloudinaryResponse {
+	publicId: String!
+	secureUrl: String!
+}
+
+type CloudinaryApiResponse {
+	success: Boolean!
+	message: String!
+	data: CloudinaryResponse
+}

@@ -16,11 +16,5 @@ spring:
     http:
       path: /graphql
       
-jwt:
-  secret-key: 9c631169019cdd1165cb5e8174ad4c96e026ab0eb84e3d9af3f1de860ff4292b20af14c25defd6f800f125478ad63b8502210c91a823723db30cbf2fc27e6a55
-  expiration: 300000  # 5 minutes
-  refresh-token:
-    expiration: 3600000  # a hour
-    
 user-service:
   base-url: http://user-service

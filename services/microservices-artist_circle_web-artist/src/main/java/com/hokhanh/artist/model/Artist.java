@@ -57,6 +57,8 @@ public class Artist {
 	
 	@Column(columnDefinition = "TEXT")
 	private String avatarUrl;
+	@Column(columnDefinition = "TEXT")
+	private String avatarCloudinaryPublicId;
 	
 	private String artistName;
 	

@@ -6,7 +6,9 @@ input ProjectRequest{
 	name: String!
 	description: String!
 	musicUrl: String!
+	musicCloudinaryPublicId: String!
 	imageUrl: String!
+	imageCloudinaryPublicId: String!
 	duration: Float!
 	otherMusicGenreNames: String
 }
