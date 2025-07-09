@@ -1,7 +1,3 @@
-scalar Upload
-
 extend type Mutation{
-	uploadAvatar(file: Upload!): CloudinaryApiResponse
-	uploadProjectMusic(file: Upload!): CloudinaryApiResponse
-	uploadProjectImage(file: Upload!): CloudinaryApiResponse
+	createCloudinarySignatureInAvatarUpload: CloudinaryUploadApiResponse!
 }

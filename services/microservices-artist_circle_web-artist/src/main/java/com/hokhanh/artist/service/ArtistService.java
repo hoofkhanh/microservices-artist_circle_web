@@ -17,8 +17,10 @@ import com.hokhanh.artist.model.Role;
 import com.hokhanh.artist.repository.ArtistRepository;
 import com.hokhanh.artist.repository.MusicGenreRepository;
 import com.hokhanh.artist.repository.RoleRepository;
+import com.hokhanh.artist.request.artist.ArtistProfileUpdateRequest;
 import com.hokhanh.artist.request.artist.ArtistRegistrationRequest;
 import com.hokhanh.artist.request.artist.ArtistRequest;
+import com.hokhanh.artist.response.artist.profileUpdate.ArtistProfileUpdateApiResponse;
 import com.hokhanh.artist.response.artist.registration.ArtistRegistrationApiResponse;
 import com.hokhanh.artist.response.common.ApiResponse;
 import com.hokhanh.artist.response.common.StatusType;
@@ -71,13 +73,14 @@ public class ArtistService {
 		return saveAndReturnArtistRegistrationApiResponse(request.artist(), userId, roles, musicGenres);
 	}
 	
-//	public ArtistApiResponse updateProfile(ArtistRequest request, Long userId) {
-//		Artist artist = artistRepository.findById(request.id()).orElse(null);
-//		if(artist == null) {
-//			return new ArtistApiResponse(false, "Artist is not found", StatusType.ARTIST_NOT_FOUND, null);
-//		}
-//		return null;
-//	}
+	public ArtistProfileUpdateApiResponse update(ArtistProfileUpdateRequest request) {
+		// ktra artist
+		Artist artist = artistRepository.findById(request.id()).orElse(null);
+		
+		// check xem ảnh có ở clodinary k
+		
+		return null;
+	}
 	
 	private ArtistRegistrationApiResponse validateUserId(Long userId) {
 		if(userId == null || !userClient.checkUserExistsInternal(userId)){
@@ -116,12 +119,30 @@ public class ArtistService {
         		);
 		        return null;
 		    }
-
-		    return !noIds ? repositoryFetcher.apply(ids) : null;
+		    
+		    if(!noIds) {
+		    	List<T> results = repositoryFetcher.apply(ids);
+		    	if(results.isEmpty() && noOtherNames) {
+		    		errorHolder.add(
+			        		new ArtistRegistrationApiResponse(
+			        				new ApiResponse(false, message, status),
+			        				null
+		    				)
+		        		);
+			        return null;
+		    	}
+		    	
+		    	return results;
+		    }
+		    
+		    return null;
 	}
 
 	private ArtistRegistrationApiResponse saveAndReturnArtistRegistrationApiResponse(
 			ArtistRequest request, Long userId, List<Role> roles, List<MusicGenre> musicGenres) {
+		roles = roles != null && !roles.isEmpty() ? roles : null;
+		musicGenres = musicGenres != null && !musicGenres.isEmpty() ? musicGenres : null;
+		
 		Artist artist = artistMapper.toArtist(
 			request,
 			new ArtistBuildContext(
@@ -162,6 +183,8 @@ public class ArtistService {
 			)
 		);
 	}
+
+	
 	
 	
 

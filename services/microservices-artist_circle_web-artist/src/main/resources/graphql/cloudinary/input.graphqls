@@ -1,0 +1,4 @@
+input CloudinaryUploadRequest{
+	publicId: String!
+	secureUrl: String!
+}

@@ -1,10 +1,15 @@
-type CloudinaryResponse {
+type CloudinaryUploadResponse{
+	folder: String! 
+	overwrite: Boolean! 
 	publicId: String!
-	secureUrl: String!
+	resourceType: String!
+	timestamp: Int!
+	apiKey: String!
+	signature: String!
 }
 
-type CloudinaryApiResponse {
+type CloudinaryUploadApiResponse {
 	success: Boolean!
-	message: String!
-	data: CloudinaryResponse
+	message: String
+	data: CloudinaryUploadResponse
 }

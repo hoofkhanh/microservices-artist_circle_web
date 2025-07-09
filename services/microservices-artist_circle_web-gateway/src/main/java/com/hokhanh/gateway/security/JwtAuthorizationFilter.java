@@ -26,7 +26,7 @@ import reactor.core.publisher.Mono;
 public class JwtAuthorizationFilter implements WebFilter {
 	
 	private static final List<String> ADMIN_REQUIRED_OPERATIONS = List.of();
-	private static final List<String> ARTIST_REQUIRED_OPERATIONS = List.of("registerArtist");
+	private static final List<String> ARTIST_REQUIRED_OPERATIONS = List.of("registerArtist", "createCloudinarySignatureInAvatarUpload");
 	
 	@Autowired
 	private UserClient userWebClient;
@@ -96,7 +96,7 @@ public class JwtAuthorizationFilter implements WebFilter {
 					ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
 							.header(HttpHeadersConstants.HEADER_USER_ID, userId)
 							.header(HttpHeadersConstants.HEADER_USER_ROLE, roleName)
-							.header(HttpHeadersConstants.HEADER_USER_ROLE, email)
+							.header(HttpHeadersConstants.HEADER_USER_EMAIL, email)
 							.build();
 
 					ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();

@@ -66,21 +66,12 @@
 			<artifactId>microservices-artist_circle_web-common</artifactId>
 		</dependency>
 		
-		<!--<dependency>
-			<groupId>com.cloudinary</groupId>
-			<artifactId>cloudinary-http5</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.cloudinary</groupId>
-			<artifactId>cloudinary-taglib</artifactId>
-			<optional>true</optional>
-		</dependency>
 		<dependency>
 			<groupId>io.github.cdimascio</groupId>
 			<artifactId>dotenv-java</artifactId>
-			<optional>true</optional>
-		</dependency>-->
+		</dependency>
+	
+
 	</dependencies>
 
 	<build>

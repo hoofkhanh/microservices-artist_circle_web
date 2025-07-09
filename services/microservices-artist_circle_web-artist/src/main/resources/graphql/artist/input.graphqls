@@ -12,8 +12,7 @@ input ArtistRequest{
 input ArtistProfileUpdateRequest{
 	artist: ArtistRequest!
 	id: ID!
-	avatarUrl: String!
-	avatarCloudinaryPublicId: String!
+	avatarUpload: CloudinaryUploadRequest!
 	instagramUrl: String
 	facebookUrl: String
 	tiktokUrl: String

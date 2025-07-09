@@ -1,6 +1,5 @@
 package com.hokhanh.common.util;
 
-import com.cloudinary.Cloudinary;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -23,10 +22,14 @@ public final class EnvLoaderUtil {
 		return Long.parseLong(get("JWT_REFRESH_TOKEN_EXPIRATION"));
 	}
 	
-	public static Cloudinary getCloudinary() {
-		return new Cloudinary(get("CLOUDINARY_URL"));
+	private EnvLoaderUtil() {
 	}
 
-	private EnvLoaderUtil() {
+	public static String getCloudinaryApiSecret() {
+		return get("CLOUDINARY_API_SECRET");
+	}
+	
+	public static String getCloudinaryApiKey() {
+		return get("CLOUDINARY_API_KEY");
 	}
 }

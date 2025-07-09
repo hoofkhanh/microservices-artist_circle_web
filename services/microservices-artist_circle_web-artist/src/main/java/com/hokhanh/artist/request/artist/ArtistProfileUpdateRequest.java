@@ -1,7 +1,8 @@
 package com.hokhanh.artist.request.artist;
 
+import com.hokhanh.common.cloudinary.dto.CloudinaryUploadRequest;
+
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -14,10 +15,8 @@ public record ArtistProfileUpdateRequest(
 	@Positive(message = "id must be a positive number")
 	Long id,
 	
-	@NotBlank(message = "avatarUrl is mandatory")
-	String avatarUrl,
-	@NotBlank(message = "avatarCloudinaryPublicId is mandatory")
-	String avatarCloudinaryPublicId,
+	@Valid
+	CloudinaryUploadRequest avatarUpload,
 	
 	String instagramUrl,
 	String facebookUrl,

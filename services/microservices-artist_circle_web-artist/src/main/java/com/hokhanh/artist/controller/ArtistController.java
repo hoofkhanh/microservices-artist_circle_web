@@ -4,7 +4,9 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.stereotype.Controller;
 
+import com.hokhanh.artist.request.artist.ArtistProfileUpdateRequest;
 import com.hokhanh.artist.request.artist.ArtistRegistrationRequest;
+import com.hokhanh.artist.response.artist.profileUpdate.ArtistProfileUpdateApiResponse;
 import com.hokhanh.artist.response.artist.registration.ArtistRegistrationApiResponse;
 import com.hokhanh.artist.service.ArtistService;
 
@@ -19,5 +21,10 @@ public class ArtistController {
 	@MutationMapping
 	public ArtistRegistrationApiResponse registerArtist(@Argument @Valid ArtistRegistrationRequest request) {
 		return service.register(request);
+	}
+	
+	@MutationMapping
+	public ArtistProfileUpdateApiResponse updateProfile(@Argument @Valid ArtistProfileUpdateRequest request) {
+		return service.update(request);
 	}
 }

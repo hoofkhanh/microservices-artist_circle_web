@@ -23,8 +23,3 @@ type ApiResponse{
 	message: String!
 	statusType: StatusType
 }
-
-type CloudinaryResponse{
-	publicId: String!
-	secureUrl: String!
-}

@@ -1,13 +1,13 @@
 package com.hokhanh.artist.controller;
 
-import java.io.IOException;
-
+import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.hokhanh.artist.service.CloudinaryService;
-import com.hokhanh.common.cloudinary.dto.CloudinaryApiResponse;
+import com.hokhanh.common.cloudinary.dto.CloudinaryUploadApiResponse;
+import com.hokhanh.common.constant.RoleConstants;
+import com.hokhanh.common.graphQL.HttpHeadersConstants;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,17 +17,19 @@ public class UploadController {
 	private final CloudinaryService cloudinaryService;
 	
 	@MutationMapping
-	public CloudinaryApiResponse uploadAvatar(MultipartFile file) throws IOException {
-		return cloudinaryService.uploadAvatar(file);
+	public CloudinaryUploadApiResponse createCloudinarySignatureInAvatarUpload(
+		@ContextValue(name = HttpHeadersConstants.HEADER_USER_ID) String userId,
+		@ContextValue(name = HttpHeadersConstants.HEADER_USER_ROLE) String userRole
+	) {
+		CloudinaryUploadApiResponse error = checkArtistRole(userRole);
+		return  error != null ?error : cloudinaryService.createSignatureInAvatarUpload(userId);
 	}
 	
-	@MutationMapping
-	public CloudinaryApiResponse uploadProjectMusic(MultipartFile file) throws IOException {
-		return cloudinaryService.uploadProjectMusic(file);
-	}
-	
-	@MutationMapping
-	public CloudinaryApiResponse uploadProjectImage(MultipartFile file) throws IOException {
-		return cloudinaryService.uploadProjectImage(file);
+	private CloudinaryUploadApiResponse checkArtistRole(String userRole) {
+		if(!RoleConstants.ARTIST_ROLE.equals(userRole)) {
+			return new CloudinaryUploadApiResponse(false, "ONLY ARTIST ROLE CAN ACCESS THIS API", null);
+		}
+		
+		return null;
 	}
 }

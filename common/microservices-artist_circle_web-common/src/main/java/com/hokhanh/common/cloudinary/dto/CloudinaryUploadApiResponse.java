@@ -1,10 +1,9 @@
 package com.hokhanh.common.cloudinary.dto;
 
-
-public record CloudinaryApiResponse(
+public record CloudinaryUploadApiResponse(
 	boolean success,
 	String message,
-	CloudinaryResponse data
+	CloudinaryUploadResponse data
 ) {
 
 }
