@@ -25,6 +25,24 @@ public class UploadController {
 		return  error != null ?error : cloudinaryService.createSignatureInAvatarUpload(userId);
 	}
 	
+	@MutationMapping
+	public CloudinaryUploadApiResponse createCloudinarySignatureInProjectMusicUpload(
+		@ContextValue(name = HttpHeadersConstants.HEADER_USER_ID) String userId,
+		@ContextValue(name = HttpHeadersConstants.HEADER_USER_ROLE) String userRole
+	) {
+		CloudinaryUploadApiResponse error = checkArtistRole(userRole);
+		return  error != null ?error : cloudinaryService.createSignatureInProjectMusicUpload(userId);
+	}
+	
+	@MutationMapping
+	public CloudinaryUploadApiResponse createCloudinarySignatureInProjectImageUpload(
+		@ContextValue(name = HttpHeadersConstants.HEADER_USER_ID) String userId,
+		@ContextValue(name = HttpHeadersConstants.HEADER_USER_ROLE) String userRole
+	) {
+		CloudinaryUploadApiResponse error = checkArtistRole(userRole);
+		return  error != null ?error : cloudinaryService.createSignatureInProjectImageUpload(userId);
+	}
+	
 	private CloudinaryUploadApiResponse checkArtistRole(String userRole) {
 		if(!RoleConstants.ARTIST_ROLE.equals(userRole)) {
 			return new CloudinaryUploadApiResponse(false, "ONLY ARTIST ROLE CAN ACCESS THIS API", null);

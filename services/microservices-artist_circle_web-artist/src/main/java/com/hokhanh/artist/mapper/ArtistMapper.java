@@ -23,6 +23,7 @@ public class ArtistMapper {
 	public Artist toArtist(ArtistRequest request, ArtistBuildContext artistBuildContext
 			, List<Role> roles, List<MusicGenre> musicGenres, List<Project> projects, GpsLocation gpsLocation) {
 		return Artist.builder()
+				.id(artistBuildContext.id())
 				.roles(roles)
 				.musicGenres(musicGenres)
 				.projects(projects)
@@ -31,6 +32,7 @@ public class ArtistMapper {
 				.birthdate(request.birthdate())
 				.gender(request.gender())
 				.avatarUrl(artistBuildContext.avatarUrl())
+				.avatarCloudinaryPublicId(artistBuildContext.avatarCloudinaryPublicId())
 				.artistName(request.artistName())
 				.instagramUrl(artistBuildContext.instagramUrl())
 				.facebookUrl(artistBuildContext.facebookUrl())

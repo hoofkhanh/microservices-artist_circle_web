@@ -6,4 +6,5 @@ import com.hokhanh.artist.model.Artist;
 
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
 	boolean existsByUserId(Long userId);
+	Artist findByUserId(Long userId);
 }

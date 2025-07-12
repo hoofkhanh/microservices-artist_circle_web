@@ -28,4 +28,19 @@ public class GpsLocation {
 	
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
+	
+	public GpsLocation(GpsLocation gps) {
+	    if (gps == null) {
+	        this.id = null;
+	        this.longitude = 0;
+	        this.latitude = 0;
+	        this.updatedAt = null;
+	        return;
+	    }
+	    this.id = gps.id;
+	    this.longitude = gps.longitude;
+	    this.latitude = gps.latitude;
+	    this.updatedAt = gps.updatedAt;
+	}
+
 }

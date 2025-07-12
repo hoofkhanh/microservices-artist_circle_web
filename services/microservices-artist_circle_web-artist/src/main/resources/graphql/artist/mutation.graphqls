@@ -1,3 +1,4 @@
 type Mutation{
 	registerArtist(request: ArtistRegistrationRequest!): ArtistRegistrationApiResponse!
+	updateProfile(request: ArtistProfileUpdateRequest!): ArtistProfileUpdateApiResponse!
 }

@@ -26,7 +26,12 @@ import reactor.core.publisher.Mono;
 public class JwtAuthorizationFilter implements WebFilter {
 	
 	private static final List<String> ADMIN_REQUIRED_OPERATIONS = List.of();
-	private static final List<String> ARTIST_REQUIRED_OPERATIONS = List.of("registerArtist", "createCloudinarySignatureInAvatarUpload");
+	private static final List<String> ARTIST_REQUIRED_OPERATIONS = 
+			List.of
+			(
+					"registerArtist", "updateProfile", "createCloudinarySignatureInAvatarUpload",
+					"createCloudinarySignatureInProjectMusicUpload", "createCloudinarySignatureInProjectImageUpload"
+			);
 	
 	@Autowired
 	private UserClient userWebClient;

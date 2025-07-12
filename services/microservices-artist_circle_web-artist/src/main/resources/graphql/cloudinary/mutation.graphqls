@@ -1,3 +1,5 @@
 extend type Mutation{
 	createCloudinarySignatureInAvatarUpload: CloudinaryUploadApiResponse!
+	createCloudinarySignatureInProjectMusicUpload: CloudinaryUploadApiResponse!
+	createCloudinarySignatureInProjectImageUpload: CloudinaryUploadApiResponse!
 }

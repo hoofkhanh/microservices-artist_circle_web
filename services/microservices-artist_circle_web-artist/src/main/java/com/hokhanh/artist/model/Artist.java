@@ -48,7 +48,7 @@ public class Artist {
 	@OneToMany(mappedBy = "poster", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Project> projects;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	private GpsLocation gpsLocation;
 	
 	private Long userId;

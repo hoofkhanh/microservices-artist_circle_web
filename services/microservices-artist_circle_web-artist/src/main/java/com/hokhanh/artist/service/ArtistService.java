@@ -3,6 +3,7 @@ package com.hokhanh.artist.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,9 @@ import com.hokhanh.artist.mapper.ArtistMapper;
 import com.hokhanh.artist.mapper.MusicGenreMapper;
 import com.hokhanh.artist.mapper.RoleMapper;
 import com.hokhanh.artist.model.Artist;
+import com.hokhanh.artist.model.GpsLocation;
 import com.hokhanh.artist.model.MusicGenre;
+import com.hokhanh.artist.model.Project;
 import com.hokhanh.artist.model.Role;
 import com.hokhanh.artist.repository.ArtistRepository;
 import com.hokhanh.artist.repository.MusicGenreRepository;
@@ -51,35 +54,75 @@ public class ArtistService {
 		List<Role> roles = validateAndFetch(
 					 request.artist().roleIds(),
 					 request.artist().otherRoleNames(),
-					 "Missing role",
-					 StatusType.NO_ROLE_ASSIGNED,
 					 roleRepository::findAllById,
-					 errors
+					 errors,
+					 new ArtistRegistrationApiResponse(
+	    				new ApiResponse(false, "Missing role", StatusType.NO_ROLE_ASSIGNED),
+	    				null
+					 )
 				);
 		
 		List<MusicGenre> musicGenres = validateAndFetch(
 				 request.artist().musicGenreIds(),
 				 request.artist().otherMusicGenreNames(),
-				 "Missing music genre",
-				 StatusType.NO_MUSIC_GENRE_ASSIGNED,
 				 musicGenreRepository::findAllById,
-				 errors
+				 errors,
+				 new ArtistRegistrationApiResponse(
+					new ApiResponse(false, "Missing music genre", StatusType.NO_MUSIC_GENRE_ASSIGNED),
+					null
+				 )
 			);
 		
 		if(errors.size() > 0) {
 			return errors.get(0);
 		}
 		
-		return saveAndReturnArtistRegistrationApiResponse(request.artist(), userId, roles, musicGenres);
+		return saveAndReturnArtistRegistrationApiResponse(request, userId, roles, musicGenres);
 	}
 	
-	public ArtistProfileUpdateApiResponse update(ArtistProfileUpdateRequest request) {
-		// ktra artist
-		Artist artist = artistRepository.findById(request.id()).orElse(null);
+	public ArtistProfileUpdateApiResponse update(ArtistProfileUpdateRequest request, String userId) {
+		Long userIdLong = Long.parseLong(userId);
+		Artist artist = artistRepository.findByUserId(userIdLong);
+		if(artist == null) {
+			return new ArtistProfileUpdateApiResponse(new ApiResponse(false, "Not found artist", StatusType.ARTIST_NOT_FOUND), null);
+		}
 		
-		// check xem ảnh có ở clodinary k
+		List<ArtistProfileUpdateApiResponse> errors = new ArrayList<>();
 		
-		return null;
+		List<Role> roles = validateAndFetch(
+				 request.artist().roleIds(),
+				 request.artist().otherRoleNames(),
+				 roleRepository::findAllById,
+				 errors,
+				 new ArtistProfileUpdateApiResponse(
+	   				new ApiResponse(false, "Missing role", StatusType.NO_ROLE_ASSIGNED),
+	   				null
+				 )
+		);
+
+	List<MusicGenre> musicGenres = validateAndFetch(
+			 request.artist().musicGenreIds(),
+			 request.artist().otherMusicGenreNames(),
+			 musicGenreRepository::findAllById,
+			 errors,
+			 new ArtistProfileUpdateApiResponse(
+				new ApiResponse(false, "Missing music genre", StatusType.NO_MUSIC_GENRE_ASSIGNED),
+				null
+			 )
+		);
+		
+		if(errors.size() > 0) {
+			return errors.get(0);
+		}
+		
+		GpsLocation gpsLocationClone = artist.getGpsLocation()!= null? new GpsLocation(artist.getGpsLocation()):null;
+		List<Project> projectClones = artist.getProjects() != null && !artist.getProjects().isEmpty() 
+				? cloneProjects(artist.getProjects()):null;
+		
+		return saveAndReturnArtistProfileUpdateApiResponse(
+			request, artist.getId(), artist.getUserId(), roles, musicGenres, 
+			projectClones, gpsLocationClone
+		);
 	}
 	
 	private ArtistRegistrationApiResponse validateUserId(Long userId) {
@@ -99,52 +142,38 @@ public class ArtistService {
 		return null;
 	}
 	
-	private <T> List<T> validateAndFetch(
+	private <T, E> List<T> validateAndFetch(
 		    List<Long> ids,
 		    String otherNames,
-		    String message,
-		    StatusType status,
 		    Function<List<Long>, List<T>> repositoryFetcher,
-		    List<ArtistRegistrationApiResponse> errorHolder
+		    List<E> errorHolder,
+		    E error
 		) {
 		    boolean noOtherNames = otherNames == null || otherNames.isBlank() || StringUtils.cleanListString(otherNames) == null;
 		    boolean noIds = ids == null || ids.isEmpty();
 
 		    if (noOtherNames && noIds) {
-		        errorHolder.add(
-	        		new ArtistRegistrationApiResponse(
-	        				new ApiResponse(false, message, status),
-	        				null
-    				)
-        		);
+		        errorHolder.add(error);
 		        return null;
 		    }
 		    
 		    if(!noIds) {
 		    	List<T> results = repositoryFetcher.apply(ids);
 		    	if(results.isEmpty() && noOtherNames) {
-		    		errorHolder.add(
-			        		new ArtistRegistrationApiResponse(
-			        				new ApiResponse(false, message, status),
-			        				null
-		    				)
-		        		);
+		    		errorHolder.add(error);
 			        return null;
 		    	}
 		    	
-		    	return results;
+		    	return results.isEmpty() ? null : results;
 		    }
 		    
 		    return null;
 	}
 
 	private ArtistRegistrationApiResponse saveAndReturnArtistRegistrationApiResponse(
-			ArtistRequest request, Long userId, List<Role> roles, List<MusicGenre> musicGenres) {
-		roles = roles != null && !roles.isEmpty() ? roles : null;
-		musicGenres = musicGenres != null && !musicGenres.isEmpty() ? musicGenres : null;
-		
+			ArtistRegistrationRequest request, Long userId, List<Role> roles, List<MusicGenre> musicGenres) {
 		Artist artist = artistMapper.toArtist(
-			request,
+			request.artist(),
 			new ArtistBuildContext(
 				userId,
 				null,
@@ -161,16 +190,7 @@ public class ArtistService {
 			null
 		);
 		
-		artist.setAvatarUrl(StringUtils.cleanBlank(artist.getAvatarUrl()));
-		artist.setAvatarCloudinaryPublicId(StringUtils.cleanBlank(artist.getAvatarCloudinaryPublicId()));
-		artist.setArtistName(StringUtils.cleanBlank(artist.getArtistName()));
-		artist.setInstagramUrl(StringUtils.cleanBlank(artist.getInstagramUrl()));
-		artist.setFacebookUrl(StringUtils.cleanBlank(artist.getFacebookUrl()));
-		artist.setTiktokUrl(StringUtils.cleanBlank(artist.getTiktokUrl()));
-		artist.setDescription(StringUtils.cleanBlank(artist.getDescription()));
-		artist.setResidence(StringUtils.cleanBlank(artist.getResidence()));
-		artist.setOtherRoleNames(StringUtils.cleanListString(artist.getOtherRoleNames()));
-		artist.setOtherMusicGenreNames(StringUtils.cleanListString(artist.getOtherMusicGenreNames()));
+		cleanArtistStringProps(artist);
 		
 		artist = artistRepository.save(artist);
 		
@@ -183,9 +203,59 @@ public class ArtistService {
 			)
 		);
 	}
+	
+	private ArtistProfileUpdateApiResponse saveAndReturnArtistProfileUpdateApiResponse(
+			ArtistProfileUpdateRequest request, Long artistId, Long userId, List<Role> roles, List<MusicGenre> musicGenres,
+			List<Project> projects, GpsLocation gpsLocation) {
+		Artist artist = artistMapper.toArtist(
+			request.artist(),
+			new ArtistBuildContext(
+				userId,
+				artistId,
+				request.avatarUpload().secureUrl(),
+				request.avatarUpload().publicId(),
+				request.instagramUrl(),
+				request.facebookUrl(),
+				request.tiktokUrl(),
+				request.description()
+			), 
+			roles, 
+			musicGenres, 
+			projects, 
+			gpsLocation
+		);
+		
+		cleanArtistStringProps(artist);
+		
+		artist = artistRepository.save(artist);
+		
+		return new ArtistProfileUpdateApiResponse(
+			new ApiResponse(true, "Update successfully", null),
+			artistMapper.toArtistProfileUpdateResponse(
+				artist, 
+				roles != null ? roleMapper.toRoleResponseList(roles) : null,
+				musicGenres != null ?  musicGenreMapper.toMusicGenreResponseList(musicGenres): null
+			)
+		);
+	}
 
 	
+	private void cleanArtistStringProps(Artist artist) {
+		artist.setAvatarUrl(StringUtils.cleanBlank(artist.getAvatarUrl()));
+		artist.setAvatarCloudinaryPublicId(StringUtils.cleanBlank(artist.getAvatarCloudinaryPublicId()));
+		artist.setArtistName(StringUtils.cleanBlank(artist.getArtistName()));
+		artist.setInstagramUrl(StringUtils.cleanBlank(artist.getInstagramUrl()));
+		artist.setFacebookUrl(StringUtils.cleanBlank(artist.getFacebookUrl()));
+		artist.setTiktokUrl(StringUtils.cleanBlank(artist.getTiktokUrl()));
+		artist.setDescription(StringUtils.cleanBlank(artist.getDescription()));
+		artist.setResidence(StringUtils.cleanBlank(artist.getResidence()));
+		artist.setOtherRoleNames(StringUtils.cleanListString(artist.getOtherRoleNames()));
+		artist.setOtherMusicGenreNames(StringUtils.cleanListString(artist.getOtherMusicGenreNames()));
+	}
 	
-	
-
+	private List<Project> cloneProjects(List<Project> originalProjects) {
+	    return originalProjects.stream()
+	            .map(p -> new Project(p))
+	            .collect(Collectors.toList());
+	}
 }
