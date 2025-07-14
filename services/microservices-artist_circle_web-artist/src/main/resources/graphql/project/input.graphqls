@@ -1,5 +1,13 @@
+input ProjectCreationRequest{
+	project: ProjectRequest!
+}
+
+input ProjectUpdateRequest{
+	project: ProjectRequest!
+	id: ID!
+}
+
 input ProjectRequest{
-	posterId: ID!
 	collaboratorIds: [ID!]
 	musicGenreIds: [ID!]
 	customCollaborators: String

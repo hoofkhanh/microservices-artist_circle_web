@@ -1,7 +1,6 @@
 package com.hokhanh.artist.model;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,13 +1,25 @@
 type GpsLocationResponse{
-	id: ID!,
-	longitude: Float!,
-	latitude: Float!,
+	id: ID!
+	artistId: ID!
+	longitude: Float!
+	latitude: Float!
 	updatedAt: String!
 }
 
-type GpsLocationApiResponse{
-	success: Boolean!
-	message: String!
-	statusType: StatusType
-	data: GpsLocationResponse
+type GpsLocationCreationResponse{
+	gpsLocation: GpsLocationResponse!
+}
+
+type GpsLocationUpdateResponse {
+	gpsLocation: GpsLocationResponse!
+}
+
+type GpsLocationCreationApiResponse{
+	apiResponse: ApiResponse!
+	data: GpsLocationCreationResponse
+}
+
+type GpsLocationUpdateApiResponse{
+	apiResponse: ApiResponse!
+	data: GpsLocationUpdateResponse
 }

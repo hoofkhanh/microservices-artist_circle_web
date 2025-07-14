@@ -7,8 +7,8 @@ import org.springframework.stereotype.Controller;
 
 import com.hokhanh.artist.request.artist.ArtistProfileUpdateRequest;
 import com.hokhanh.artist.request.artist.ArtistRegistrationRequest;
-import com.hokhanh.artist.response.artist.profileUpdate.ArtistProfileUpdateApiResponse;
-import com.hokhanh.artist.response.artist.registration.ArtistRegistrationApiResponse;
+import com.hokhanh.artist.response.artist.create.ArtistRegistrationApiResponse;
+import com.hokhanh.artist.response.artist.update.ArtistProfileUpdateApiResponse;
 import com.hokhanh.artist.service.ArtistService;
 import com.hokhanh.common.graphQL.HttpHeadersConstants;
 

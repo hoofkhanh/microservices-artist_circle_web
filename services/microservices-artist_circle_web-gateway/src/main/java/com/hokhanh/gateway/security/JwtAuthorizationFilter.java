@@ -27,11 +27,13 @@ public class JwtAuthorizationFilter implements WebFilter {
 	
 	private static final List<String> ADMIN_REQUIRED_OPERATIONS = List.of();
 	private static final List<String> ARTIST_REQUIRED_OPERATIONS = 
-			List.of
-			(
-					"registerArtist", "updateProfile", "createCloudinarySignatureInAvatarUpload",
-					"createCloudinarySignatureInProjectMusicUpload", "createCloudinarySignatureInProjectImageUpload"
-			);
+		List.of
+		(
+			"registerArtist", "updateProfile", 
+			"createCloudinarySignatureInAvatarUpload","createCloudinarySignatureInProjectMusicUpload", "createCloudinarySignatureInProjectImageUpload",
+			"createProject", "updateProject",
+			"createGpsLocaiton", "updateGpsLocation"
+		);
 	
 	@Autowired
 	private UserClient userWebClient;
@@ -105,7 +107,6 @@ public class JwtAuthorizationFilter implements WebFilter {
 							.build();
 
 					ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();
-
 					return chain.filter(mutatedExchange);
 				}));
 	}

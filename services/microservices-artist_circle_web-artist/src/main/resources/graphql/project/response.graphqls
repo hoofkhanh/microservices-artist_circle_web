@@ -1,7 +1,7 @@
 type ArtistSummaryResponse{
 	id: ID!
 	artistName: String!
-	avatarUrl: String!
+	avatarUrl: String
 }
 
 type ProjectResponse{
@@ -13,16 +13,29 @@ type ProjectResponse{
 	name: String!
 	description: String!
 	musicUrl: String!
+	musicCloudinaryPublicId: String!
 	imageUrl: String!
+	imageCloudinaryPublicId: String!
 	duration: Float!
 	otherMusicGenreNames: String
 }
 
-type ProjectApiResponse{
-	success: Boolean!
-	message: String!
-	statusType: StatusType
-	data: ProjectResponse
+type ProjectCreationResponse{
+	project: ProjectResponse! 
+}
+
+type ProjectCreationApiResponse{
+	apiResponse: ApiResponse!
+	data: ProjectCreationResponse
+}
+
+type ProjectUpdateResponse{
+	project: ProjectResponse! 
+}
+
+type ProjectUpdateApiResponse{
+	apiResponse: ApiResponse!
+	data: ProjectUpdateResponse
 }
 
 type ProjectPage{

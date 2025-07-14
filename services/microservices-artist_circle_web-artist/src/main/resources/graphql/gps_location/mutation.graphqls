@@ -1,0 +1,4 @@
+extend type Mutation{
+	createGpsLocaiton(request: GpsLocationCreationRequest!): GpsLocationCreationApiResponse!
+	updateGpsLocation(request: GpsLocationUpdateRequest!): GpsLocationUpdateApiResponse!
+}

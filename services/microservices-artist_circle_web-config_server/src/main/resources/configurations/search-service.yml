@@ -1,0 +1,8 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5671
+    virtual-host: / #này giống như tên database vậy
+    
+  elasticsearch:
+    uris: http://localhost:9201

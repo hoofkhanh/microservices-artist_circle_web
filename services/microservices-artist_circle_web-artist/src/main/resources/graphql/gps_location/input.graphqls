@@ -2,3 +2,11 @@ input GpsLocationRequest{
 	longitude: Float!
 	latitude: Float!
 }
+
+input GpsLocationCreationRequest{
+	gpsLocation: GpsLocationRequest!
+}
+
+input GpsLocationUpdateRequest{
+	gpsLocation: GpsLocationRequest!
+}

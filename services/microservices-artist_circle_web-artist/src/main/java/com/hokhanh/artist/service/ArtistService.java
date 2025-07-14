@@ -2,7 +2,6 @@ package com.hokhanh.artist.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -10,8 +9,6 @@ import org.springframework.stereotype.Service;
 import com.hokhanh.artist.client.UserClient;
 import com.hokhanh.artist.mapper.ArtistBuildContext;
 import com.hokhanh.artist.mapper.ArtistMapper;
-import com.hokhanh.artist.mapper.MusicGenreMapper;
-import com.hokhanh.artist.mapper.RoleMapper;
 import com.hokhanh.artist.model.Artist;
 import com.hokhanh.artist.model.GpsLocation;
 import com.hokhanh.artist.model.MusicGenre;
@@ -22,11 +19,11 @@ import com.hokhanh.artist.repository.MusicGenreRepository;
 import com.hokhanh.artist.repository.RoleRepository;
 import com.hokhanh.artist.request.artist.ArtistProfileUpdateRequest;
 import com.hokhanh.artist.request.artist.ArtistRegistrationRequest;
-import com.hokhanh.artist.request.artist.ArtistRequest;
-import com.hokhanh.artist.response.artist.profileUpdate.ArtistProfileUpdateApiResponse;
-import com.hokhanh.artist.response.artist.registration.ArtistRegistrationApiResponse;
+import com.hokhanh.artist.response.artist.create.ArtistRegistrationApiResponse;
+import com.hokhanh.artist.response.artist.update.ArtistProfileUpdateApiResponse;
 import com.hokhanh.artist.response.common.ApiResponse;
 import com.hokhanh.artist.response.common.StatusType;
+import com.hokhanh.artist.util.RepositoryUtils;
 import com.hokhanh.common.util.StringUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -38,8 +35,6 @@ public class ArtistService {
 	private final RoleRepository roleRepository;
 	private final MusicGenreRepository musicGenreRepository;
 	private final ArtistMapper artistMapper;
-	private final RoleMapper roleMapper;
-	private final MusicGenreMapper musicGenreMapper;
 	private final UserClient userClient;
 	
 	public ArtistRegistrationApiResponse register(ArtistRegistrationRequest request) {
@@ -51,7 +46,7 @@ public class ArtistService {
 		
 		List<ArtistRegistrationApiResponse> errors = new ArrayList<>();
 		
-		List<Role> roles = validateAndFetch(
+		List<Role> roles = RepositoryUtils.validateAndFetch(
 					 request.artist().roleIds(),
 					 request.artist().otherRoleNames(),
 					 roleRepository::findAllById,
@@ -62,7 +57,7 @@ public class ArtistService {
 					 )
 				);
 		
-		List<MusicGenre> musicGenres = validateAndFetch(
+		List<MusicGenre> musicGenres = RepositoryUtils.validateAndFetch(
 				 request.artist().musicGenreIds(),
 				 request.artist().otherMusicGenreNames(),
 				 musicGenreRepository::findAllById,
@@ -89,7 +84,7 @@ public class ArtistService {
 		
 		List<ArtistProfileUpdateApiResponse> errors = new ArrayList<>();
 		
-		List<Role> roles = validateAndFetch(
+		List<Role> roles = RepositoryUtils.validateAndFetch(
 				 request.artist().roleIds(),
 				 request.artist().otherRoleNames(),
 				 roleRepository::findAllById,
@@ -100,7 +95,7 @@ public class ArtistService {
 				 )
 		);
 
-	List<MusicGenre> musicGenres = validateAndFetch(
+	List<MusicGenre> musicGenres = RepositoryUtils.validateAndFetch(
 			 request.artist().musicGenreIds(),
 			 request.artist().otherMusicGenreNames(),
 			 musicGenreRepository::findAllById,
@@ -142,33 +137,7 @@ public class ArtistService {
 		return null;
 	}
 	
-	private <T, E> List<T> validateAndFetch(
-		    List<Long> ids,
-		    String otherNames,
-		    Function<List<Long>, List<T>> repositoryFetcher,
-		    List<E> errorHolder,
-		    E error
-		) {
-		    boolean noOtherNames = otherNames == null || otherNames.isBlank() || StringUtils.cleanListString(otherNames) == null;
-		    boolean noIds = ids == null || ids.isEmpty();
-
-		    if (noOtherNames && noIds) {
-		        errorHolder.add(error);
-		        return null;
-		    }
-		    
-		    if(!noIds) {
-		    	List<T> results = repositoryFetcher.apply(ids);
-		    	if(results.isEmpty() && noOtherNames) {
-		    		errorHolder.add(error);
-			        return null;
-		    	}
-		    	
-		    	return results.isEmpty() ? null : results;
-		    }
-		    
-		    return null;
-	}
+	
 
 	private ArtistRegistrationApiResponse saveAndReturnArtistRegistrationApiResponse(
 			ArtistRegistrationRequest request, Long userId, List<Role> roles, List<MusicGenre> musicGenres) {
@@ -198,8 +167,8 @@ public class ArtistService {
 			new ApiResponse(true, "Register successfully", null),
 			artistMapper.toArtistRegistrationResponse(
 				artist, 
-				roles != null ? roleMapper.toRoleResponseList(roles) : null,
-				musicGenres != null ?  musicGenreMapper.toMusicGenreResponseList(musicGenres): null
+				roles,
+				musicGenres
 			)
 		);
 	}
@@ -233,8 +202,8 @@ public class ArtistService {
 			new ApiResponse(true, "Update successfully", null),
 			artistMapper.toArtistProfileUpdateResponse(
 				artist, 
-				roles != null ? roleMapper.toRoleResponseList(roles) : null,
-				musicGenres != null ?  musicGenreMapper.toMusicGenreResponseList(musicGenres): null
+				roles,
+				musicGenres
 			)
 		);
 	}

@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.graphql.data.method.annotation.GraphQlExceptionHandler;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import graphql.GraphQLError;
 import graphql.GraphqlErrorBuilder;
 import jakarta.validation.ConstraintViolationException;
 
+@ControllerAdvice
 public class GraphQLValidationExceptionHandler {
 	
 	@GraphQlExceptionHandler(ConstraintViolationException.class)

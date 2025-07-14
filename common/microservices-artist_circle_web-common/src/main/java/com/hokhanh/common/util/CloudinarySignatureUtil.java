@@ -31,8 +31,6 @@ public final class CloudinarySignatureUtil {
         
         toSign.append(API_SECRET);
         
-        System.out.println(toSign);
-
         // Hash SHA1
         return sha1Hex(toSign.toString());
     }

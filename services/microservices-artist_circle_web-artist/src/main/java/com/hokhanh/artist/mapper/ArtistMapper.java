@@ -1,6 +1,7 @@
 package com.hokhanh.artist.mapper;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -12,13 +13,18 @@ import com.hokhanh.artist.model.Role;
 import com.hokhanh.artist.request.artist.ArtistRequest;
 import com.hokhanh.artist.response.artist.common.ArtistResponse;
 import com.hokhanh.artist.response.artist.common.RoleResponse;
-import com.hokhanh.artist.response.artist.profileUpdate.ArtistProfileUpdateResponse;
-import com.hokhanh.artist.response.artist.registration.ArtistRegistrationResponse;
+import com.hokhanh.artist.response.artist.create.ArtistRegistrationResponse;
+import com.hokhanh.artist.response.artist.update.ArtistProfileUpdateResponse;
 import com.hokhanh.artist.response.common.MusicGenreResponse;
+
+import lombok.RequiredArgsConstructor;
+
 
 
 @Service
+@RequiredArgsConstructor
 public class ArtistMapper {
+	private final MusicGenreMapper musicGenreMapper;
 	
 	public Artist toArtist(ArtistRequest request, ArtistBuildContext artistBuildContext
 			, List<Role> roles, List<MusicGenre> musicGenres, List<Project> projects, GpsLocation gpsLocation) {
@@ -44,23 +50,42 @@ public class ArtistMapper {
 				.build();
 	}
 	
-	public ArtistRegistrationResponse toArtistRegistrationResponse(Artist artist, List<RoleResponse> roles, 
-			List<MusicGenreResponse> musicGenres) {
+	public ArtistRegistrationResponse toArtistRegistrationResponse(Artist artist, List<Role> roles, 
+			List<MusicGenre> musicGenres) {
 		return new ArtistRegistrationResponse(
-				buildArtistResponse(artist, roles, musicGenres)
+				buildArtistResponse(
+					artist, 
+					toRoleResponseList(roles),
+					musicGenreMapper.toMusicGenreResponseList(musicGenres)
+				)
 		);
 	}
 	
-	public ArtistProfileUpdateResponse toArtistProfileUpdateResponse(Artist artist, List<RoleResponse> roles, 
-			List<MusicGenreResponse> musicGenres) {
+	public ArtistProfileUpdateResponse toArtistProfileUpdateResponse(Artist artist, List<Role> roles, 
+			List<MusicGenre> musicGenres) {
 		return new ArtistProfileUpdateResponse(
-				buildArtistResponse(artist, roles, musicGenres),
+				buildArtistResponse(
+					artist, 
+					toRoleResponseList(roles),
+					musicGenreMapper.toMusicGenreResponseList(musicGenres)
+				),
 				artist.getAvatarUrl(),
 				artist.getInstagramUrl(),
 				artist.getFacebookUrl(),
 				artist.getTiktokUrl(),
 				artist.getDescription()
 		);
+	}
+	
+	private List<RoleResponse> toRoleResponseList(List<Role> roles) {
+		if(roles == null) {
+			return null;
+		}
+		
+		return roles
+				.stream()
+				.map(role -> new RoleResponse(role.getId(), role.getName()))
+				.collect(Collectors.toList());
 	}
 	
 	private ArtistResponse buildArtistResponse(Artist artist, List<RoleResponse> roles, List<MusicGenreResponse> musicGenres) {

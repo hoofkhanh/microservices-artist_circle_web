@@ -11,6 +11,10 @@ import com.hokhanh.artist.response.common.MusicGenreResponse;
 @Service
 public class MusicGenreMapper {
 	public List<MusicGenreResponse> toMusicGenreResponseList(List<MusicGenre> musicGenres) {
+		if(musicGenres == null) {
+			return null;
+		}
+		
 		return musicGenres
 				.stream()
 				.map(musicGenre -> new MusicGenreResponse(musicGenre.getId(), musicGenre.getName()))

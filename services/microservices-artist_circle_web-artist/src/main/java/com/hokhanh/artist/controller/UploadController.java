@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 
 import com.hokhanh.artist.service.CloudinaryService;
 import com.hokhanh.common.cloudinary.dto.CloudinaryUploadApiResponse;
-import com.hokhanh.common.constant.RoleConstants;
 import com.hokhanh.common.graphQL.HttpHeadersConstants;
 
 import lombok.RequiredArgsConstructor;
@@ -21,8 +20,7 @@ public class UploadController {
 		@ContextValue(name = HttpHeadersConstants.HEADER_USER_ID) String userId,
 		@ContextValue(name = HttpHeadersConstants.HEADER_USER_ROLE) String userRole
 	) {
-		CloudinaryUploadApiResponse error = checkArtistRole(userRole);
-		return  error != null ?error : cloudinaryService.createSignatureInAvatarUpload(userId);
+		return cloudinaryService.createSignatureInAvatarUpload(userId);
 	}
 	
 	@MutationMapping
@@ -30,8 +28,7 @@ public class UploadController {
 		@ContextValue(name = HttpHeadersConstants.HEADER_USER_ID) String userId,
 		@ContextValue(name = HttpHeadersConstants.HEADER_USER_ROLE) String userRole
 	) {
-		CloudinaryUploadApiResponse error = checkArtistRole(userRole);
-		return  error != null ?error : cloudinaryService.createSignatureInProjectMusicUpload(userId);
+		return cloudinaryService.createSignatureInProjectMusicUpload(userId);
 	}
 	
 	@MutationMapping
@@ -39,15 +36,8 @@ public class UploadController {
 		@ContextValue(name = HttpHeadersConstants.HEADER_USER_ID) String userId,
 		@ContextValue(name = HttpHeadersConstants.HEADER_USER_ROLE) String userRole
 	) {
-		CloudinaryUploadApiResponse error = checkArtistRole(userRole);
-		return  error != null ?error : cloudinaryService.createSignatureInProjectImageUpload(userId);
+		return cloudinaryService.createSignatureInProjectImageUpload(userId);
 	}
 	
-	private CloudinaryUploadApiResponse checkArtistRole(String userRole) {
-		if(!RoleConstants.ARTIST_ROLE.equals(userRole)) {
-			return new CloudinaryUploadApiResponse(false, "ONLY ARTIST ROLE CAN ACCESS THIS API", null);
-		}
-		
-		return null;
-	}
+	
 }

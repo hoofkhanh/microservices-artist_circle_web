@@ -1,0 +1,4 @@
+extend type Mutation {
+	createProject(request: ProjectCreationRequest!): ProjectCreationApiResponse!
+	updateProject(request: ProjectUpdateRequest!): ProjectUpdateApiResponse!
+}
