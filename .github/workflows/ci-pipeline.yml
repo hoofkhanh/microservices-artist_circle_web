@@ -11,12 +11,12 @@ jobs:
   filter:
     runs-on: ubuntu-latest
     outputs:
-      artist: ${{ steps.filter.outputs.artist }}
-      user: ${{ steps.filter.outputs.user }}
-      gateway: ${{ steps.filter.outputs.gateway }}
-      search: ${{ steps.filter.outputs.search }}
-      config_server: ${{ steps.filter.outputs.config_server }}
-      discovery: ${{ steps.filter.outputs.discovery }}
+      microservices-artist_circle_web-artist: ${{ steps.filter.outputs.artist }}
+      microservices-artist_circle_web-user: ${{ steps.filter.outputs.user }}
+      microservices-artist_circle_web-gateway: ${{ steps.filter.outputs.gateway }}
+      microservices-artist_circle_web-search: ${{ steps.filter.outputs.search }}
+      microservices-artist_circle_web-config_server: ${{ steps.filter.outputs.config_server }}
+      microservices-artist_circle_web-discovery: ${{ steps.filter.outputs.discovery }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -56,14 +56,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [artist, user, gateway, search, config_server, discovery]
+        service:
+          - microservices-artist_circle_web-artist
+          - microservices-artist_circle_web-user
+          - microservices-artist_circle_web-gateway
+          - microservices-artist_circle_web-search
+          - microservices-artist_circle_web-config_server
+          - microservices-artist_circle_web-discovery
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Skip if no change for ${{ matrix.service }}
-        if: ${{ needs.filter.outputs[matrix.service] != 'true' }}
-        run: echo "No changes in ${{ matrix.service }}, skipping..."
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -85,7 +87,7 @@ jobs:
 
       - name: Run unit tests for ${{ matrix.service }}
         if: ${{ needs.filter.outputs[matrix.service] == 'true' }}
-        run: mvn -B test --file services/microservices-artist_circle_web-${{ matrix.service }}/pom.xml
+        run: mvn -B test --file services/${{ matrix.service }}/pom.xml
 
       - name: Log in to Docker Hub
         if: ${{ needs.filter.outputs[matrix.service] == 'true' }}
@@ -97,6 +99,7 @@ jobs:
       - name: Build and push ${{ matrix.service }} Docker image
         if: ${{ needs.filter.outputs[matrix.service] == 'true' }}
         run: |
-          docker build -f services/microservices-artist_circle_web-${{ matrix.service }}/Dockerfile \
-            -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}-service:${{ env.IMAGE_TAG }} .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}-service:${{ env.IMAGE_TAG }}
+          docker build -f services/${{ matrix.service }}/Dockerfile \
+            -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:${{ env.IMAGE_TAG }} .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:${{ env.IMAGE_TAG }}
+
