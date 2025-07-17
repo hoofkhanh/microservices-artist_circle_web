@@ -83,7 +83,7 @@ jobs:
 
       - name: Build and install common module
         if: ${{ needs.filter.outputs[matrix.service] == 'true' }}
-        run: mvn clean install -pl common -am -DskipTests
+        run: mvn clean install -pl microservices-artist_circle_web-common -am -DskipTests
 
       - name: Run unit tests for ${{ matrix.service }}
         if: ${{ needs.filter.outputs[matrix.service] == 'true' }}
