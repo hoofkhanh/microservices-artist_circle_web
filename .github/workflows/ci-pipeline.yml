@@ -79,6 +79,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Build and install common module
+        if: ${{ needs.filter.outputs[matrix.service] == 'true' }}
+        run: mvn clean install -pl common -am -DskipTests
+
       - name: Run unit tests for ${{ matrix.service }}
         if: ${{ needs.filter.outputs[matrix.service] == 'true' }}
         run: mvn -B test --file services/microservices-artist_circle_web-${{ matrix.service }}/pom.xml
