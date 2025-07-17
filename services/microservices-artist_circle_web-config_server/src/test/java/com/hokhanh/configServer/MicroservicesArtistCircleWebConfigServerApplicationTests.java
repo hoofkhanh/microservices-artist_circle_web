@@ -1,10 +1,11 @@
-package com.hokhanh;
+package com.hokhanh.configServer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+
 @SpringBootTest
-class MicroservicesArtistCircleWebDiscoveryApplicationTests {
+class MicroservicesArtistCircleWebConfigServerApplicationTests {
 
 	@Test
 	void contextLoads() {
