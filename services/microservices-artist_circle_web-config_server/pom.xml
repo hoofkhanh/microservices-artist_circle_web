@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.hokhanh</groupId>
 		<artifactId>microservices-artist_circle_web</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${revision}</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	<artifactId>microservices-artist_circle_web-config_server</artifactId>

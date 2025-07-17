@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.hokhanh</groupId>
 	<artifactId>microservices-artist_circle_web</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${revision}</version>
 	<packaging>pom</packaging>
 
 	<url />
@@ -30,6 +30,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2025.0.0</spring-cloud.version>
+		<revision>1.0.0</revision>
 	</properties>
 
 	<modules>
@@ -38,6 +39,7 @@
 		<module>services/microservices-artist_circle_web-gateway</module>
 		<module>services/microservices-artist_circle_web-user</module>
 		<module>services/microservices-artist_circle_web-artist</module>
+		<module>services/microservices-artist_circle_web-search</module>
 		<module>common/microservices-artist_circle_web-common</module>
 	</modules>
 
@@ -93,7 +95,7 @@
 			<dependency>
 				<groupId>com.hokhanh</groupId>
 				<artifactId>microservices-artist_circle_web-common</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>${revision}</version>
 			</dependency>
 
 			<dependency>

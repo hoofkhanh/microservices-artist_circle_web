@@ -1,0 +1,2 @@
+CREATE DATABASE artist;
+CREATE DATABASE "user";

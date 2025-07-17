@@ -1,8 +1,11 @@
 spring:
   rabbitmq:
-    host: localhost
-    port: 5671
-    virtual-host: / #này giống như tên database vậy
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5671}
+    virtual-host: ${RABBITMQ_VHOST:/} #này giống như tên database vậy
     
   elasticsearch:
-    uris: http://localhost:9201
+    uris: ${ELASTICSEARCH_URI:http://localhost:9201}
+    
+server:
+  port: ${SERVER_PORT:8083}

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.hokhanh</groupId>
 		<artifactId>microservices-artist_circle_web</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${revision}</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	<artifactId>microservices-artist_circle_web-common</artifactId>
@@ -54,4 +54,27 @@
 			<optional>true</optional>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- Ngăn plugin kế thừa từ parent -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<id>repackage</id>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
