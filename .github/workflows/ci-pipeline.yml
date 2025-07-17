@@ -57,10 +57,13 @@ jobs:
     strategy:
       matrix:
         service: [artist, user, gateway, search, config_server, discovery]
-    if: needs.filter.outputs[matrix.service] == 'true'
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Skip if no change for ${{ matrix.service }}
+        if: ${{ needs.filter.outputs[matrix.service] != 'true' }}
+        run: echo "No changes in ${{ matrix.service }}, skipping..."
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -77,15 +80,18 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Run unit tests for ${{ matrix.service }}
+        if: ${{ needs.filter.outputs[matrix.service] == 'true' }}
         run: mvn -B test --file services/microservices-artist_circle_web-${{ matrix.service }}/pom.xml
 
       - name: Log in to Docker Hub
+        if: ${{ needs.filter.outputs[matrix.service] == 'true' }}
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push ${{ matrix.service }} Docker image
+        if: ${{ needs.filter.outputs[matrix.service] == 'true' }}
         run: |
           docker build -f services/microservices-artist_circle_web-${{ matrix.service }}/Dockerfile \
             -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}-service:${{ env.IMAGE_TAG }} .
