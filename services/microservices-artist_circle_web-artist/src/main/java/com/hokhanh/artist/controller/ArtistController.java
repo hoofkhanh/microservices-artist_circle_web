@@ -3,11 +3,13 @@ package com.hokhanh.artist.controller;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 import com.hokhanh.artist.request.artist.ArtistProfileUpdateRequest;
 import com.hokhanh.artist.request.artist.ArtistRegistrationRequest;
 import com.hokhanh.artist.response.artist.create.ArtistRegistrationApiResponse;
+import com.hokhanh.artist.response.artist.search.ArtistSearchApiResponse;
 import com.hokhanh.artist.response.artist.update.ArtistProfileUpdateApiResponse;
 import com.hokhanh.artist.service.ArtistService;
 import com.hokhanh.common.graphQL.HttpHeadersConstants;
@@ -30,4 +32,17 @@ public class ArtistController {
 			@ContextValue(name = HttpHeadersConstants.HEADER_USER_ID) String userId) {
 		return service.update(request, userId);
 	}
+	
+	@QueryMapping
+	public ArtistSearchApiResponse me(@ContextValue(name = HttpHeadersConstants.HEADER_USER_ID) String userId) {
+		return service.me(userId);
+	}
+	
+//	@QueryMapping
+//	public ArtistSearchApiResponse searchArtists(@Argument @Valid @ModelAttribute ArtistSearchRequest request) {
+//		return null;
+//	}
+	
+	
+	
 }

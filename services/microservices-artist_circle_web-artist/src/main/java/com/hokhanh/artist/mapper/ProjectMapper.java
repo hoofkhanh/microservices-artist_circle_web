@@ -109,5 +109,28 @@ public class ProjectMapper {
 		);
 	}
 	
+	public List<ProjectResponse> buildProjectResponseList(
+			List<Project> projects
+		) {
+			if(projects ==null) return null;
+			
+			return projects.stream()
+					.map(p -> new ProjectResponse(
+						p.getId(), 
+						toArtistSummaryResponse(p.getPoster()), 
+						toArtistSummaryResponseList(p.getCollaborators()), 
+						musicGenreMapper.toMusicGenreResponseList(p.getMusicGenres()),
+						p.getCustomCollaborators(), 
+						p.getName(), 
+						p.getDescription(), 
+						p.getMusicUrl(), 
+						p.getMusicCloudinaryPublicId(), 
+						p.getImageUrl(), 
+						p.getImageCloudinaryPublicId(), 
+						p.getDuration(), 
+						p.getOtherMusicGenreNames()	
+					)).toList();
+		} 
+	
 	
 }

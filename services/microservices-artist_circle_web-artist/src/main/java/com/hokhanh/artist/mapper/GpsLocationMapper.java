@@ -21,19 +21,20 @@ public class GpsLocationMapper {
 	
 	public GpsLocationCreationResponse toGpsLocationCreationResponse(GpsLocation gpsLocation, Long artistId) {
 		return new GpsLocationCreationResponse(
-			new GpsLocationResponse(
-				gpsLocation.getId(), artistId, gpsLocation.getLongitude(), 
-				gpsLocation.getLatitude(), gpsLocation.getUpdatedAt()
-			)
+			buidlGpsLocationResponse(gpsLocation, artistId)
 		);
 	}
 	
 	public GpsLocationUpdateResponse toGpsLocationUpdateResponse(GpsLocation gpsLocation, Long artistId) {
 		return new GpsLocationUpdateResponse(
-			new GpsLocationResponse(
-				gpsLocation.getId(), artistId,gpsLocation.getLongitude(), 
-				gpsLocation.getLatitude(), gpsLocation.getUpdatedAt()
-			)
+			buidlGpsLocationResponse(gpsLocation, artistId)
+		);
+	}
+	
+	public GpsLocationResponse buidlGpsLocationResponse(GpsLocation gpsLocation, Long artistId) {
+		return new GpsLocationResponse(
+			gpsLocation.getId(), artistId,gpsLocation.getLongitude(), 
+			gpsLocation.getLatitude(), gpsLocation.getUpdatedAt()
 		);
 	}
 }

@@ -32,7 +32,8 @@ public class JwtAuthorizationFilter implements WebFilter {
 			"registerArtist", "updateProfile", 
 			"createCloudinarySignatureInAvatarUpload","createCloudinarySignatureInProjectMusicUpload", "createCloudinarySignatureInProjectImageUpload",
 			"createProject", "updateProject",
-			"createGpsLocaiton", "updateGpsLocation"
+			"createGpsLocaiton", "updateGpsLocation",
+			"me"
 		);
 	
 	@Autowired

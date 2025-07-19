@@ -7,6 +7,7 @@ import com.hokhanh.artist.mapper.GpsLocationBuildContext;
 import com.hokhanh.artist.mapper.GpsLocationMapper;
 import com.hokhanh.artist.model.Artist;
 import com.hokhanh.artist.model.GpsLocation;
+import com.hokhanh.artist.rabbitMq.ArtistRabbitMqProducer;
 import com.hokhanh.artist.repository.ArtistRepository;
 import com.hokhanh.artist.repository.GpsLocationRepository;
 import com.hokhanh.artist.request.gpsLocation.GpsLocationCreationRequest;
@@ -16,6 +17,7 @@ import com.hokhanh.artist.response.common.ApiResponse;
 import com.hokhanh.artist.response.common.StatusType;
 import com.hokhanh.artist.response.gpsLocation.create.GpsLocationCreationApiResponse;
 import com.hokhanh.artist.response.gpsLocation.update.GpsLocationUpdateApiResponse;
+import com.hokhanh.common.rabbitMq.dto.ArtistMessage;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +28,7 @@ public class GpsLocationService {
 	private final GpsLocationRepository gpsLocationRepository;
 	private final ArtistRepository artistRepository;
 	private final GpsLocationMapper gpsLocationMapper;
+	private final ArtistRabbitMqProducer artistRabbitMqProducer;
 	
 	public GpsLocationCreationApiResponse createGpsLocation(GpsLocationCreationRequest request, String userId) {
 		Artist artist = validateArtist(userId);
@@ -40,6 +43,13 @@ public class GpsLocationService {
 		GpsLocation gpsLocation = builContext(request.gpsLocation(), null);
 		
 		gpsLocation = saveAndSetGpsLocation(gpsLocation, artist);
+		
+		artistRabbitMqProducer.sendArtistMessage(
+			new ArtistMessage(
+				artist.getId(), artist.getArtistName(), 
+				gpsLocation.getLongitude(), gpsLocation.getLatitude()
+			)
+		);
 		
 		return new GpsLocationCreationApiResponse(
 			new ApiResponse(true, "Create Gps Location successfully", null),
@@ -67,6 +77,13 @@ public class GpsLocationService {
 		GpsLocation gpsLocation = builContext(request.gpsLocation(), artist.getGpsLocation().getId());
 		
 		gpsLocation = saveAndSetGpsLocation(gpsLocation, artist);
+		
+		artistRabbitMqProducer.sendArtistMessage(
+			new ArtistMessage(
+				artist.getId(), artist.getArtistName(), 
+				gpsLocation.getLongitude(), gpsLocation.getLatitude()
+			)
+		);
 		
 		return new GpsLocationUpdateApiResponse(
 			new ApiResponse(true, "Update Gps Location successfully", null),

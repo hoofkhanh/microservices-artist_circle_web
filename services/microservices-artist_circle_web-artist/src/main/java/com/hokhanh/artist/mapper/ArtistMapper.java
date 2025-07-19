@@ -14,6 +14,7 @@ import com.hokhanh.artist.request.artist.ArtistRequest;
 import com.hokhanh.artist.response.artist.common.ArtistResponse;
 import com.hokhanh.artist.response.artist.common.RoleResponse;
 import com.hokhanh.artist.response.artist.create.ArtistRegistrationResponse;
+import com.hokhanh.artist.response.artist.search.ArtistSearchResponse;
 import com.hokhanh.artist.response.artist.update.ArtistProfileUpdateResponse;
 import com.hokhanh.artist.response.common.MusicGenreResponse;
 
@@ -25,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ArtistMapper {
 	private final MusicGenreMapper musicGenreMapper;
+	private final ProjectMapper projectMapper;
+	private final GpsLocationMapper gpsLocationMapper;
 	
 	public Artist toArtist(ArtistRequest request, ArtistBuildContext artistBuildContext
 			, List<Role> roles, List<MusicGenre> musicGenres, List<Project> projects, GpsLocation gpsLocation) {
@@ -74,6 +77,24 @@ public class ArtistMapper {
 				artist.getFacebookUrl(),
 				artist.getTiktokUrl(),
 				artist.getDescription()
+		);
+	}
+	
+	public ArtistSearchResponse toArtistSearchResponse(Artist artist) {
+		return new ArtistSearchResponse(
+				buildArtistResponse(
+					artist, 
+					toRoleResponseList(artist.getRoles()),
+					musicGenreMapper.toMusicGenreResponseList(artist.getMusicGenres())
+				),
+				artist.getAvatarUrl(),
+				artist.getAvatarCloudinaryPublicId(),
+				artist.getInstagramUrl(),
+				artist.getFacebookUrl(),
+				artist.getTiktokUrl(),
+				artist.getDescription(),
+				projectMapper.buildProjectResponseList(artist.getProjects()),
+				gpsLocationMapper.buidlGpsLocationResponse(artist.getGpsLocation(), artist.getId())
 		);
 	}
 	

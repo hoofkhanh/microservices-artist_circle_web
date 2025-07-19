@@ -28,6 +28,18 @@ type ArtistRegistrationResponse{
 	artist: ArtistResponse!
 }
 
+type ArtistSearchResponse{
+	artist: ArtistResponse!
+	avatarUrl: String!
+	avatarCloudinaryPublicId: String
+	instagramUrl: String
+	facebookUrl: String
+	tiktokUrl: String
+	description: String
+	projects: [ProjectResponse!]
+	gpsLocation: GpsLocationResponse!
+}
+
 type ArtistRegistrationApiResponse{
 	apiResponse: ApiResponse!
 	data: ArtistRegistrationResponse
@@ -36,6 +48,11 @@ type ArtistRegistrationApiResponse{
 type ArtistProfileUpdateApiResponse{
 	apiResponse: ApiResponse!
 	data: ArtistProfileUpdateResponse
+}
+
+type ArtistSearchApiResponse{
+	apiResponse: ApiResponse!
+	data: ArtistSearchResponse
 }
 
 type ArtistPage{
