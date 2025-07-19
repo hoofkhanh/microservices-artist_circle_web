@@ -91,7 +91,7 @@ jobs:
 
       - name: Run unit tests for ${{ matrix.service }}
         # if: ${{ needs.filter.outputs[matrix.service] == 'true' }}
-        run: mvn -B test --file services/${{ matrix.service }}/pom.xml
+        run: mvn -B test -pl services/${{ matrix.service }} -am
 
       - name: Log in to Docker Hub
         # if: ${{ needs.filter.outputs[matrix.service] == 'true' }}
