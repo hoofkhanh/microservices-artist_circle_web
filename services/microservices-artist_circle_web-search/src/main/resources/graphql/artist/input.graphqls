@@ -1,0 +1,8 @@
+input ArtistSearchByArtistNameRequest{
+	artistName: String!
+	page: PageCustomRequest!
+}
+
+input ArtistSearchNearbyRequest{
+	page: PageCustomRequest!
+}

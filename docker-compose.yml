@@ -3,6 +3,7 @@ x-common-environment: &common-env
   EUREKA_HOST: ${EUREKA_HOST}
   EUREKA_PORT: ${EUREKA_PORT}
   USER_SERVICE_URL: ${USER_SERVICE_URL}
+  ARTIST_SERVICE_URL: ${ARTIST_SERVICE_URL}
   CONFIG_SERVER_HOST: ${CONFIG_SERVER_HOST}
   CONFIG_SERVER_PORT: ${CONFIG_SERVER_PORT}
 
@@ -201,6 +202,7 @@ services:
     depends_on:
       -  config_server-service
       -  discovery-service
+      -  postgres
     restart: unless-stopped
     
   config_server-service:
@@ -249,9 +251,17 @@ services:
       RABBITMQ_VHOST: ${RABBITMQ_VHOST}
       ELASTICSEARCH_URI: ${ELASTICSEARCH_HOST}
       SERVER_PORT: ${SEARCH_PORT}
+      MONGODB_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGODB_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGODB_HOST: ${MONGODB_HOST}
+      MONGODB_PORT: 27017
+      MONGODB_DATABABASE: ${MONGODB_DATABABASE_HISTORY}
+      MONGODB_AUTHEN_DB: ${MONGODB_AUTHEN_DB}
     depends_on:
       -  config_server-service
       -  discovery-service
+      -  elasticsearch
+      -  mongodb
     restart: unless-stopped
       
   user-service:
@@ -277,6 +287,7 @@ services:
     depends_on:
       -  config_server-service
       -  discovery-service
+      -  postgres
     restart: unless-stopped
       
 networks:

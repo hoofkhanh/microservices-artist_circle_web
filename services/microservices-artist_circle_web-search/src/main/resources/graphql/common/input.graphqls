@@ -1,0 +1,4 @@
+input PageCustomRequest{
+	pageNumber: Int!
+	pageSize: Int!
+}

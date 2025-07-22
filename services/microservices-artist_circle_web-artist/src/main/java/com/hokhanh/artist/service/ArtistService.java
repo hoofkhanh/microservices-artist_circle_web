@@ -2,6 +2,7 @@ package com.hokhanh.artist.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -21,12 +22,15 @@ import com.hokhanh.artist.repository.RoleRepository;
 import com.hokhanh.artist.request.artist.ArtistProfileUpdateRequest;
 import com.hokhanh.artist.request.artist.ArtistRegistrationRequest;
 import com.hokhanh.artist.response.artist.create.ArtistRegistrationApiResponse;
-import com.hokhanh.artist.response.artist.search.ArtistSearchApiResponse;
+import com.hokhanh.artist.response.artist.search.ArtistSearchDetailApiResponse;
 import com.hokhanh.artist.response.artist.update.ArtistProfileUpdateApiResponse;
 import com.hokhanh.artist.response.common.ApiResponse;
 import com.hokhanh.artist.response.common.StatusType;
 import com.hokhanh.artist.util.RepositoryUtils;
+import com.hokhanh.common.artist.response.ArtistSearchResponse;
+import com.hokhanh.common.gpsLocation.response.ArtistGpsLocationResponse;
 import com.hokhanh.common.rabbitMq.dto.ArtistMessage;
+import com.hokhanh.common.rabbitMq.dto.ArtistSearchHistoryMessage;
 import com.hokhanh.common.util.StringUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -124,28 +128,87 @@ public class ArtistService {
 		);
 	}
 	
-	public ArtistSearchApiResponse me(String userId) {
+	public ArtistSearchDetailApiResponse findByUserId(String userId) {
 		Artist artist = artistRepository.findByUserId(Long.parseLong(userId));
 		if(artist == null) {
-			return new ArtistSearchApiResponse(new ApiResponse(false, "Artist was not found", StatusType.ARTIST_NOT_FOUND), null);
+			return new ArtistSearchDetailApiResponse(new ApiResponse(false, "Artist was not found", StatusType.ARTIST_NOT_FOUND), null);
 		}
 		
-		return new ArtistSearchApiResponse(
+		return new ArtistSearchDetailApiResponse(
 				new ApiResponse(true, "Search yourself successfully", null),
-				artistMapper.toArtistSearchResponse(artist)
+				artistMapper.toArtistSearchDetailResponse(artist, true)
 			);
 	}
 	
-//	public ArtistSearchApiResponse searchArtistsByNameOrNearBy(ArtistSearchRequest request) {
-//		List<Artist> artists = null;
-//		if(request.gpsLocation() != null) {
-//			
-//		}else {
-//			artists = artistRepository.findByNameContainingIgnoreCase(request.artistName());
-//		}
-//		
-//		return null;
-//	}
+	public ArtistSearchDetailApiResponse findById(Long artistId, String userId) {
+		Artist targetArtist = artistRepository.findById(artistId).orElse(null);
+		if(targetArtist == null) {
+			return new ArtistSearchDetailApiResponse(
+					new ApiResponse(false, "Artist was not found", StatusType.ARTIST_NOT_FOUND),
+					null
+				);
+		}
+		
+		Artist searcherArtist = artistRepository.findByUserId(Long.parseLong(userId));
+		if(searcherArtist == null) {
+			return new ArtistSearchDetailApiResponse(
+					new ApiResponse(false, "Artist was not found (myselft)", StatusType.ARTIST_NOT_FOUND),
+					null
+				);
+		}
+		
+		if(targetArtist.getId().equals(searcherArtist.getId())) {
+			return new ArtistSearchDetailApiResponse(
+					new ApiResponse(false, "Can't search yourself", StatusType.SEARCH_YOUR_SELF),
+					null
+				);
+		}
+		
+		Long searcherArtistId = searcherArtist.getId();
+		Long targetArtistId = targetArtist.getId();
+		artistRabbitMqProducer.sendArtistSearchHistoryMessage(
+					new ArtistSearchHistoryMessage(searcherArtistId, targetArtistId)
+				);
+		
+		
+		return new ArtistSearchDetailApiResponse(
+				new ApiResponse(true, "Search artist successfully", null),
+				artistMapper.toArtistSearchDetailResponse(targetArtist, false)
+			);
+	}
+	
+	// definitely order remains 
+	public List<ArtistSearchResponse> searchArtists(List<Long> ids) {
+		List<Artist> artists = artistRepository.findAllById(ids);
+
+		Map<Long, Artist> artistMap = artists.stream()
+			    .collect(Collectors.toMap(
+			        a -> a.getId(),
+			        a -> a
+			    ));
+
+	    return ids.stream()
+	    	    .map(id -> artistMap.get(id))
+	    	    .filter(a -> a != null)
+	    	    .map(a -> new ArtistSearchResponse(
+	    	        a.getId(),
+	    	        a.getArtistName(),
+	    	        a.getAvatarUrl(),
+	    	        a.getResidence(),
+	    	        null
+	    	    ))
+	    	    .toList();
+	}
+	
+	public ArtistGpsLocationResponse getMyGpsLocationAndArtistId(Long userId) {
+		Artist artist = artistRepository.findByUserId(userId);
+		if(artist == null) {
+			return null;
+		}
+		
+		return new ArtistGpsLocationResponse(artist.getGpsLocation().getLongitude(), 
+				artist.getGpsLocation().getLatitude(), artist.getId());
+	}
 	
 	private ArtistRegistrationApiResponse validateUserId(Long userId) {
 		if(userId == null || !userClient.checkUserExistsInternal(userId)){
@@ -265,4 +328,10 @@ public class ArtistService {
 	            .map(p -> new Project(p))
 	            .collect(Collectors.toList());
 	}
+
+	
+	
+	
+
+	
 }

@@ -7,5 +7,14 @@ spring:
   elasticsearch:
     uris: ${ELASTICSEARCH_URI:http://localhost:9201}
     
+  data:
+    mongodb:
+      username: ${MONGODB_USERNAME:hoofkhanh}
+      password: ${MONGODB_PASSWORD:hoofkhanh}
+      host: ${MONGODB_HOST:localhost}
+      port: ${MONGODB_PORT:27010}
+      database: ${MONGODB_DATABABASE:history}
+      authentication-database: ${MONGODB_AUTHEN_DB:admin}
+    
 server:
   port: ${SERVER_PORT:8083}

@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.hokhanh.artist.response.common.MusicGenreResponse;
 
+
+
 public record ArtistResponse(
 	Long id,
 	List<RoleResponse> roles,

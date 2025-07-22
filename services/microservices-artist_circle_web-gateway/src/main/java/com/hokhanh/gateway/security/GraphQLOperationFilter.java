@@ -45,7 +45,7 @@ public class GraphQLOperationFilter implements WebFilter {
 		);
 	
 	private static final List<String> INTERNAL_OPERATIONS = List.of(
-			"isTokenBlockedInternal", "checkUserExistsInternal"
+			"isTokenBlockedInternal", "checkUserExistsInternal", "searchArtistsInternal", "getMyGpsLocationAndArtistIdInternal"
 		);
 	
 	@Value("${spring.graphql.http.path}")

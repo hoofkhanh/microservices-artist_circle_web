@@ -28,9 +28,9 @@ type ArtistRegistrationResponse{
 	artist: ArtistResponse!
 }
 
-type ArtistSearchResponse{
+type ArtistSearchDetailResponse{
 	artist: ArtistResponse!
-	avatarUrl: String!
+	avatarUrl: String
 	avatarCloudinaryPublicId: String
 	instagramUrl: String
 	facebookUrl: String
@@ -38,6 +38,14 @@ type ArtistSearchResponse{
 	description: String
 	projects: [ProjectResponse!]
 	gpsLocation: GpsLocationResponse!
+}
+
+type ArtistSearchResponse {
+	id: Int!
+	artistName: String!
+	avatarUrl: String
+	residence: String!
+	distanceInMeters: Float
 }
 
 type ArtistRegistrationApiResponse{
@@ -50,19 +58,13 @@ type ArtistProfileUpdateApiResponse{
 	data: ArtistProfileUpdateResponse
 }
 
-type ArtistSearchApiResponse{
+type ArtistSearchDetailApiResponse{
 	apiResponse: ApiResponse!
-	data: ArtistSearchResponse
+	data: ArtistSearchDetailResponse
 }
 
-type ArtistPage{
-	content: [ArtistResponse!]!
-	page: PageInfo!
-}
-
-type ArtistListApiResponse{
-	success: Boolean!
-	message: String!
-	statusType: StatusType
-	data: ArtistPage!
+type ArtistGpsLocationResponse{
+	longitude: Float!
+	latitude: Float!
+	artistId: ID!
 }

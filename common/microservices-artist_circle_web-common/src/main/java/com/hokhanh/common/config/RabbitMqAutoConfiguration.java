@@ -7,7 +7,7 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.hokhanh.common.constant.ArtistRabbitMqConstants;
+import com.hokhanh.common.rabbitMq.ArtistRabbitMqConstants;
 
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -24,13 +24,23 @@ public class RabbitMqAutoConfiguration {
     }
 
     @Bean
-    Queue queue() {
-        return new Queue(ArtistRabbitMqConstants.QUEUE, true); 
+    Queue artistQueue() {
+        return new Queue(ArtistRabbitMqConstants.ARTIST_QUEUE, true); 
+    }
+    
+    @Bean
+    Queue artistSearchHistoryQueue() {
+        return new Queue(ArtistRabbitMqConstants.ARTIST_SEARCH_HISTORY_QUEUE, true); 
     }
 
     @Bean
-    Binding binding(Queue queue, DirectExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(ArtistRabbitMqConstants.ROUTING_KEY);
+    Binding bindingArtistCreateQueue(Queue artistQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(artistQueue).to(exchange).with(ArtistRabbitMqConstants.ARTIST_ROUTING_KEY);
+    }
+    
+    @Bean
+    Binding bindingArtistSearchHistoryCreateQueue(Queue artistSearchHistoryQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(artistSearchHistoryQueue).to(exchange).with(ArtistRabbitMqConstants.ARTIST_SEARCH_HISTORY_ROUTING_KEY);
     }
     
     @Bean

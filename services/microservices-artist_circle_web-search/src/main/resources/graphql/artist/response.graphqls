@@ -1,0 +1,12 @@
+type ArtistSearchResponse {
+	id: Int!
+	artistName: String!
+	avatarUrl: String
+	residence: String!
+	distanceInMeters: Float
+}
+
+type ArtistSearchPageResponse {
+	artists: [ArtistSearchResponse!]!
+	pageInfo: PageInfoResponse!
+}

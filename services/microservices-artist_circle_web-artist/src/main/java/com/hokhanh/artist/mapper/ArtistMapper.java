@@ -14,7 +14,7 @@ import com.hokhanh.artist.request.artist.ArtistRequest;
 import com.hokhanh.artist.response.artist.common.ArtistResponse;
 import com.hokhanh.artist.response.artist.common.RoleResponse;
 import com.hokhanh.artist.response.artist.create.ArtistRegistrationResponse;
-import com.hokhanh.artist.response.artist.search.ArtistSearchResponse;
+import com.hokhanh.artist.response.artist.search.ArtistSearchDetailResponse;
 import com.hokhanh.artist.response.artist.update.ArtistProfileUpdateResponse;
 import com.hokhanh.artist.response.common.MusicGenreResponse;
 
@@ -80,15 +80,15 @@ public class ArtistMapper {
 		);
 	}
 	
-	public ArtistSearchResponse toArtistSearchResponse(Artist artist) {
-		return new ArtistSearchResponse(
+	public ArtistSearchDetailResponse toArtistSearchDetailResponse(Artist artist, boolean isMe) {
+		return new ArtistSearchDetailResponse(
 				buildArtistResponse(
 					artist, 
 					toRoleResponseList(artist.getRoles()),
 					musicGenreMapper.toMusicGenreResponseList(artist.getMusicGenres())
 				),
 				artist.getAvatarUrl(),
-				artist.getAvatarCloudinaryPublicId(),
+				isMe ? artist.getAvatarCloudinaryPublicId() : null,
 				artist.getInstagramUrl(),
 				artist.getFacebookUrl(),
 				artist.getTiktokUrl(),
@@ -122,4 +122,5 @@ public class ArtistMapper {
 				artist.getOtherMusicGenreNames()
 			);
 	}
+	
 }

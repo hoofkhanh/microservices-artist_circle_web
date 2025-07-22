@@ -3,13 +3,6 @@ type MusicGenreResponse {
 	name: String!
 }
 
-type PageInfo{
-	size: Int!
-	number: Int!
-	totalElements: Int!
-	totalPages: Int!
-}
-
 enum StatusType{
 	NO_ROLE_ASSIGNED
 	NO_MUSIC_GENRE_ASSIGNED
@@ -19,6 +12,7 @@ enum StatusType{
 	NO_COLLABORATOR_ASSIGNED
 	PROJECT_NOT_FOUND
 	YOU_NOT_POSTER
+	SEARCH_YOUR_SELF
 }
 
 type ApiResponse{

@@ -2,9 +2,9 @@ package com.hokhanh.artist.response.artist.search;
 
 import com.hokhanh.artist.response.common.ApiResponse;
 
-public record ArtistSearchApiResponse(
+public record ArtistSearchDetailApiResponse(
 	ApiResponse apiResponse,
-	ArtistSearchResponse data
+	ArtistSearchDetailResponse data
 ) {
 
 }

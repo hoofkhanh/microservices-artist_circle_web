@@ -1,0 +1,4 @@
+type Query{
+	searchArtistsByName(request: ArtistSearchByArtistNameRequest!): ArtistSearchPageResponse!
+	searchArtistsNearBy(request: ArtistSearchNearbyRequest!): ArtistSearchPageResponse!
+}

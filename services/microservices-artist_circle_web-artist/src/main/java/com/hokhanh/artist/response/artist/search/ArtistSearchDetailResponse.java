@@ -1,11 +1,13 @@
 package com.hokhanh.artist.response.artist.search;
 
+
+import java.util.List;
+
 import com.hokhanh.artist.response.artist.common.ArtistResponse;
 import com.hokhanh.artist.response.gpsLocation.common.GpsLocationResponse;
 import com.hokhanh.artist.response.project.common.ProjectResponse;
-import java.util.List;
 
-public record ArtistSearchResponse(
+public record ArtistSearchDetailResponse(
 	ArtistResponse artist,
 	String avatarUrl,
 	String avatarCloudinaryPublicId, // có thê null nếu k phải tôi truy cập

@@ -1,0 +1,18 @@
+type PageInfoResponse{
+	size: Int!
+	number: Int!
+	totalElements: Int!
+	totalPages: Int!
+}
+
+enum StatusType{
+	ARTIST_SEARCH_HISTORY_NOT_FOUND
+	YOU_NOT_SEARCHER
+	NO_RECORDS_DELETE
+}
+
+type ApiResponse{
+	success: Boolean!
+	message: String!
+	statusType: StatusType
+}
